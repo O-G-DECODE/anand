@@ -52,11 +52,12 @@ $conn->close();
 
 <div class="form-container">
 <h2>Add New Club</h2>
-    <?php if ($message): ?>
-        <div class="<?php echo strpos($message, 'Error') === false ? 'message' : 'error'; ?>">
-            <?php echo $message; ?>
-        </div>
-    <?php endif; ?>
+<?php if ($message): ?>
+    <div class="<?= strpos($message, 'Error') === false ? 'message' : 'error'; ?>">
+        <?= $message; ?>
+        <?= strpos($message, 'Error') === false ? '<button onclick="location.href=\'admin_page.php\'">OK</button>' : ''; ?>
+    </div>
+<?php endif; ?>
     
     <form name="clubForm" action="" method="POST" onsubmit="return validateForm()">
         <label for="club_name">Club Name:</label>

@@ -101,10 +101,11 @@ $conn->close();
 <div class="form-container">
 <h2>Add New Student</h2>
     <?php if ($message): ?>
-        <div class="<?php echo strpos($message, 'Error') === false ? 'message' : 'error'; ?>">
-            <?php echo $message; ?>
-        </div>
-    <?php endif; ?>
+    <div class="<?= strpos($message, 'Error') === false ? 'message' : 'error'; ?>">
+        <?= $message; ?>
+        <?= strpos($message, 'Error') === false ? '<button onclick="location.href=\'admin_page.php\'">OK</button>' : ''; ?>
+    </div>
+<?php endif; ?>
     
     <form action="" method="POST">
         <label for="roll_number">Roll Number:</label>
