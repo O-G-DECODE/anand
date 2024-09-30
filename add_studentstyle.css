@@ -1,0 +1,81 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+.action-button {
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.check-button {
+    background-color: #4CAF50; /* Green */
+}
+
+.check-button:hover {
+    background-color: #45a049;
+}
+
+.remove-button {
+    background-color: #f44336; /* Red */
+}
+
+.remove-button:hover {
+    background-color: #d32f2f;
+}
+
+.input-field {
+    width: 100px; /* Reduced width of the roll number input field */
+    box-sizing: border-box;
+    padding: 4px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.add-button {
+    background-color: #008CBA; /* Blue */
+    padding: 12px 24px;
+    font-size: 16px;
+    display: inline-block;
+    margin-right: 10px; /* Add some space between Add and Submit All button */
+}
+
+.add-button:hover {
+    background-color: #007bb5;
+}
+
+.submit-all-button {
+    background-color: #f39c12; /* Orange */
+    padding: 12px 24px;
+    font-size: 16px;
+}
+
+.submit-all-button:hover {
+    background-color:
+} 

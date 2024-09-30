@@ -1,0 +1,272 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #94cccd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: fit-content;
+    margin: 0;
+}
+.container {
+    width: 300px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+h2 {
+    text-align: center;
+}
+.login-section {
+    margin-bottom: 20px;
+}
+.login-section input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.login-section button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #28a745;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+#blue{
+ background-color: #008CBA;
+}
+.login-section button:hover {
+    background-color: #218838;
+}
+
+/* css of login student and staff */
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #accbcce2;
+}
+.button-container {
+    display: flex;
+    gap: 20px;
+}
+.button {
+    padding: 20px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.button:hover {
+    background-color: #ddd;
+}
+.admin {
+    background-color:red; /* Blue */
+    color: white;
+}
+.student {
+    background-color: #4CAF50; /* Green */
+    color: white; 
+}
+.staff {
+    background-color: #008CBA; /* Blue */
+    color: white;
+}
+
+
+
+/* student pagr */
+
+.studentpage {
+    h1 {
+         background-color: #f9fbf9;
+         
+    }
+body {
+    font-family: Arial, sans-serif;
+    background-color: #d6bc7f7f;
+    margin: 0;
+    padding: 10px;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: #6ad57c;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table, th, td {
+    border: 1px solid #5d0303;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #fcfefee7;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    color: #fff;
+    background-color: #4CAF50;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+button:hover {
+    background-color: #4CAF50;
+}
+
+.removeBtn {
+    background-color: #dc3545;
+}
+
+.removeBtn:hover {
+    background-color: #c82333;
+}
+}
+
+ student registration form */
+
+
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+}
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+label {
+    display: block;
+    margin-bottom: 8px;
+}
+input[type="text"], input[type="password"], select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #fff;
+    background-color: #4CAF50;
+    margin-right: 10px;
+}
+button.clear {
+    background-color: #6c757d;
+}
+button:hover {
+    opacity: 0.9;
+}
+/* staff  register *
+.staffregister{
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        height: fit-content;
+    }
+    
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+    
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    label {
+        margin-bottom: 5px;
+        color: #555;
+    }
+    
+
+    select {
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    
+    button {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        color: #fff;
+        font-size: 16px;
+    }
+    
+    .clear-btn {
+        background-color: #e74c3c;
+        margin-right: 10px;
+    }
+    
+    .submit-btn {
+        background-color: #3498db;
+    }
+    
+    button:hover {
+        opacity: 0.9;
+    }
+    
+}

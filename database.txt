@@ -1,0 +1,31 @@
+No problem! Here’s a summary of the database tables and their fields we discussed:
+
+### 1. **Student Table**
+- **student_id** (INT, auto increment) - Primary key
+- **roll_number** (VARCHAR/INT) - Unique identifier for each student
+- **course_id** (INT) - Foreign key referencing the course table
+- **password** (VARCHAR) - Hashed password (default set to roll number)
+- **club_id** (INT) - Foreign key referencing the club table (nullable)
+
+### 2. **Course Table**
+- **course_id** (INT, auto increment) - Primary key
+- **name** (VARCHAR) - Name of the course
+- **department_id** (INT) - Foreign key referencing the department table
+
+### 3. **Department Table**
+- **department_id** (INT, auto increment) - Primary key
+- **name** (VARCHAR) - Name of the department
+
+### 4. **Club Table**
+- **club_id** (INT, auto increment) - Primary key
+- **name** (VARCHAR) - Name of the club
+
+### 5. **Staff Table**
+- **staff_id** (INT, auto increment) - Primary key
+- **name** (VARCHAR) - Name of the staff member
+- **department_id** (INT) - Foreign key referencing the department table
+- **email** (VARCHAR) - Email of the staff member
+- **password** (VARCHAR) - Hashed password (initially set to email)
+- **club_id** (INT) - Foreign key referencing the club table (nullable)
+
+Feel free to retype or ask about any specific part when you continue!
