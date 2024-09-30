@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="sty.css">
 </head>
 <body>
-    <header>
-        <h1>Admin Dashboard</h1>
-    </header>
+<header>
+    <h1>Admin Dashboard</h1>
+</header>
     <nav>
         <ul>
             <li><a href="#students">Manage Students</a></li>
@@ -17,6 +17,7 @@
             <li><a href="#departments">Manage Departments</a></li>
             <li><a href="#courses">Manage Courses</a></li>
             <li><a href="#clubs">Manage Clubs</a></li>
+            <li><a href="logout.php"><button>Logout</button></a></li>
         </ul>
     </nav>
     <main>

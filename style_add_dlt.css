@@ -18,8 +18,8 @@ body {
 
 h1 {
     text-align: center;
-    color: #333;
-}
+    margin-bottom: 20px; /* add some space between the heading and the form */
+  }
 
 label {
     font-weight: bold;
