@@ -64,9 +64,9 @@ $conn->close();
 </head>
 <body>
 
-<h1>Add New Staff</h1>
 
 <div class="form-container">
+<h2>Add New Staff</h2>
     <?php if ($message): ?>
         <div class="<?php echo strpos($message, 'Error') === false ? 'message' : 'error'; ?>">
             <?php echo $message; ?>

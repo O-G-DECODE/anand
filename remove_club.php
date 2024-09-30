@@ -45,9 +45,9 @@ $conn->close();
 </head>
 <body>
 
-<h1>Remove Club</h1>
 
 <div class="form-container">
+<h2>Remove Club</h2>
     <?php if ($message): ?>
         <div class="<?php echo strpos($message, 'Error') === false ? 'message' : 'error'; ?>">
             <?php echo $message; ?>

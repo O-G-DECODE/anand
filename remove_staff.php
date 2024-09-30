@@ -45,9 +45,9 @@ $conn->close();
 </head>
 <body>
 
-<h1>Remove Staff</h1>
 
 <div class="form-container">
+<h2>Remove Staff</h2>
     <?php if ($message): ?>
         <div class="<?php echo strpos($message, 'Error') === false ? 'message' : 'error'; ?>">
             <?php echo $message; ?>

@@ -41,18 +41,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Admin Login</h1>
+<div class="container">
+    
+    <div class="login-section">
 
     <?php if (isset($error)) { echo "<p>$error</p>"; } ?>
 
     <form method="post">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email"><br><br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password"><br><br>
-        <input type="submit" value="Login">
+    <h3>Admin Login</h3>
+        
+        <input type="email" id="email" name="email" placeholder="Email" required><br>
+        <input type="password" id="password" name="password" placeholder="Password" require><br>
+        <button type="submit" name="submit" value="Login">Login</button>
     </form>
-
+    </div>
+</div>
 </body>
 </html>
 

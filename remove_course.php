@@ -45,9 +45,10 @@ $conn->close();
 </head>
 <body>
 
-<h1>Remove Course</h1>
+
 
 <div class="form-container">
+<h2>Remove Course</h2>
     <?php if ($message): ?>
         <div class="<?php echo strpos($message, 'Error') === false ? 'message' : 'error'; ?>">
             <?php echo $message; ?>
