@@ -26,13 +26,13 @@ if (mysqli_num_rows($db_exists) == 0) {
 }
 
 // Check if table exists
-$table_exists = mysqli_query($conn, "SHOW TABLES LIKE 'club'");
+$table_exists = mysqli_query($conn, "SHOW TABLES LIKE 'department'");
 
 if (mysqli_num_rows($table_exists) == 0) {
     // Table does not exist, create it
-    $sql = "CREATE TABLE club (
-        club_id INT(12) NOT NULL PRIMARY KEY,
-        name TEXT NOT NULL
+    $sql = "CREATE TABLE department (
+        department_id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(60) NOT NULL
     )";
     if (mysqli_query($conn, $sql)) {
         echo "Table created successfully";
@@ -47,9 +47,10 @@ $table_exists = mysqli_query($conn, "SHOW TABLES LIKE 'course'");
 if (mysqli_num_rows($table_exists) == 0) {
     // Table does not exist, create it
     $sql = "CREATE TABLE course (
-        course_id INT(12) NOT NULL PRIMARY KEY ,
-        department_id INT(12) NOT NULL,
-        name TEXT(40) NOT NULL
+        course_id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(40) NOT NULL,
+        department_id INT NOT NULL,
+        FOREIGN KEY (department_id) REFERENCES department(department_id)
     )";
     if (mysqli_query($conn, $sql)) {
         echo "Table created successfully";
@@ -59,13 +60,13 @@ if (mysqli_num_rows($table_exists) == 0) {
 }
 
 // Check if table exists
-$table_exists = mysqli_query($conn, "SHOW TABLES LIKE 'department'");
+$table_exists = mysqli_query($conn, "SHOW TABLES LIKE 'club'");
 
 if (mysqli_num_rows($table_exists) == 0) {
     // Table does not exist, create it
-    $sql = "CREATE TABLE department (
-        department_id INT(6) NOT NULL PRIMARY KEY,
-        name TEXT(60) NOT NULL
+    $sql = "CREATE TABLE club (
+        club_id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(60) NOT NULL
     )";
     if (mysqli_query($conn, $sql)) {
         echo "Table created successfully";
@@ -73,6 +74,49 @@ if (mysqli_num_rows($table_exists) == 0) {
         echo "Error creating table: " . mysqli_error($conn);
     }
 }
+
+// Check if table exists
+$table_exists = mysqli_query($conn, "SHOW TABLES LIKE 'staff'");
+
+if (mysqli_num_rows($table_exists) == 0) {
+    // Table does not exist, create it
+    $sql = "CREATE TABLE staff (
+        staff_id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(40) NOT NULL,
+        department_id INT NOT NULL,
+        email VARCHAR(50) NOT NULL,
+        password VARCHAR(50) NOT NULL,
+        club_id INT NULL,
+        FOREIGN KEY (department_id) REFERENCES department(department_id),
+        FOREIGN KEY (club_id) REFERENCES club(club_id)
+    )";
+    if (mysqli_query($conn, $sql)) {
+        echo "Table created successfully";
+    } else {
+        echo "Error creating table: " . mysqli_error($conn);
+    }
+}
+
+// Check if table exists
+$table_exists = mysqli_query($conn, "SHOW TABLES LIKE 'student'");
+
+if (mysqli_num_rows($table_exists) == 0) {
+    // Table does not exist, create it
+    $sql = "CREATE TABLE student (
+        roll_number VARCHAR(20) PRIMARY KEY,
+        course_id INT NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        club_id INT NULL,
+        FOREIGN KEY (course_id) REFERENCES course(course_id),
+        FOREIGN KEY (club_id) REFERENCES club(club_id)
+    )";
+    if (mysqli_query($conn, $sql)) {
+        echo "Table created successfully";
+    } else {
+        echo "Error creating table: " . mysqli_error($conn);
+    }
+}
+
 
 // Check if table exists
 $table_exists = mysqli_query($conn, "SHOW TABLES LIKE 'event'");
@@ -101,47 +145,8 @@ if (mysqli_num_rows($table_exists) == 0) {
     $sql = "CREATE TABLE request (
         roll_number INT(12) NOT NULL,
         event_id INT(10) NOT NULL,
-        approve INT(1)
+        approve INT(1) NULL
     )";
-    if (mysqli_query($conn, $sql)) {
-        echo "Table created successfully";
-    } else {
-        echo "Error creating table: " . mysqli_error($conn);
-    }
-}
-
-// Check if table exists
-$table_exists = mysqli_query($conn, "SHOW TABLES LIKE 'staff'");
-
-if (mysqli_num_rows($table_exists) == 0) {
-    // Table does not exist, create it
-    $sql = "CREATE TABLE staff (
-        staff_id INT(12) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        name TEXT(40) NOT NULL,
-        email VARCHAR(50) NOT NULL,
-        department_id INT(12) NOT NULL,
-        password VARCHAR(50) NOT NULL,
-        club_id INT(12)
-    )";
-    if (mysqli_query($conn, $sql)) {
-        echo "Table created successfully";
-    } else {
-        echo "Error creating table: " . mysqli_error($conn);
-    }
-}
-
-// Check if table exists
-$table_exists = mysqli_query($conn, "SHOW TABLES LIKE 'student'");
-
-if (mysqli_num_rows($table_exists) == 0) {
-    // Table does not exist, create it
-    $sql = "CREATE TABLE student (
-    roll_number BIGINT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    course_id INT NOT NULL,
-    club_id INT
-)";
     if (mysqli_query($conn, $sql)) {
         echo "Table created successfully";
     } else {
