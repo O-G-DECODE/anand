@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_all'])) {
         echo json_encode(array('status' => 'error', 'message' => 'No roll numbers provided.'));
         exit();
     }
-
+    
     // Prepare the query to check existing entries
     $checkSql = "SELECT COUNT(*) as count FROM request WHERE roll_number = ? AND event_id = ?";
     $checkStmt = $conn->prepare($checkSql);
@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_all'])) {
     }
 
     // Prepare the query to insert into the request table
-    $insertSql = "INSERT INTO request (roll_number, event_id, approve) VALUES (?, ? , '0')";
+    $insertSql = "INSERT INTO request (roll_number, event_id,approve) VALUES (?, ? , 0)";
     $insertStmt = $conn->prepare($insertSql);
     if (!$insertStmt) {
         error_log("Prepare statement failed: " . $conn->error);

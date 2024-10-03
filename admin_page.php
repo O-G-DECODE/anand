@@ -17,6 +17,8 @@
             <li><a href="#departments">Manage Departments</a></li>
             <li><a href="#courses">Manage Courses</a></li>
             <li><a href="#clubs">Manage Clubs</a></li>
+            <li><a href="#event">Manage Events</a></li>
+
             <li><a href="logout.php"><button>Logout</button></a></li>
         </ul>
     </nav>
@@ -24,8 +26,8 @@
     <section id="students">
     <h2> Students</h2> 
     <a href="student_details.php"><button>View</button></a>
-    <a href="add_student.php"><button class="add-btn">Add</button></a>
-    <a href="remove_student.php"><button class="remove-btn">Remove</button></a>
+    <!--<a href="add_student.php"><button class="add-btn">Add</button></a>
+    <a href="remove_student.php"><button class="remove-btn">Remove</button></a> -->
 </section>
 
 <!-- Repeat the same for other sections -->
@@ -61,6 +63,15 @@
             <a href="remove_club.php"><button class="remove-btn">Remove</button></a>
             <!--  more functionality as needed -->
         </section>
+
+        <section id="event">
+            <h2> Events</h2>
+           <a href="event_details.php"><button>  View</button> </a>
+           <a href="add_event.php"><button class="add-btn">Add</button></a>
+           <a href="remove_event.php"><button class="remove-btn">Remove</button></a>
+            <!--  more functionality as needed -->
+        </section>
+
     </main>
     <footer>
         <p>&copy; 2024 Admin Dashboard</p>

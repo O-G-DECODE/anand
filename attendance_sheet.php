@@ -59,7 +59,7 @@ if (mysqli_num_rows($result) > 0) {
                 $student_name = $row2['name'];
 
                 // Query to check if the roll number is in the request table and approve field is 1
-                $query = "SELECT * FROM request WHERE roll_number = '$roll_number' AND approve = $department_id AND event_id = '$event_id'";
+                $query = "SELECT * FROM request WHERE roll_number = '$roll_number' AND approve = '$department_id' AND event_id = '$event_id'";
                 $result3 = mysqli_query($conn, $query);
 
                 if (mysqli_num_rows($result3) > 0) {

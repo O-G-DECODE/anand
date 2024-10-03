@@ -13,7 +13,7 @@ if (isset($_GET['roll_number'])) {
     $response = [
         'roll_number' => $roll_number,
         'name' => $name,
-        'course' =>   getCourseName($course_id, $conn),
+        'course' => getCourseName($course_id, $conn),
         'year' => getYear($year_id, $conn)
     ];
 
