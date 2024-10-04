@@ -106,7 +106,7 @@ if ($stmt) {
                                 <input type='hidden' name='event_id' value='$event_id'>
                                 <button type='submit' class='btn-delete'>Delete</button>
                             </form>
-                            <form method='get' action='review_event.php' style='display:inline;'>
+                            <form method='get' action='review_event_admin.php' style='display:inline;'>
                                 <input type='hidden' name='event_id' value='$event_id'>
                                 <button type='submit' class='btn-review'>Review</button>
                             </form>

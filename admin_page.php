@@ -23,12 +23,7 @@
         </ul>
     </nav>
     <main>
-    <section id="students">
-    <h2> Students</h2> 
-    <a href="student_details.php"><button>View</button></a>
-    <!--<a href="add_student.php"><button class="add-btn">Add</button></a>
-    <a href="remove_student.php"><button class="remove-btn">Remove</button></a> -->
-</section>
+   
 
 <!-- Repeat the same for other sections -->
         
@@ -64,14 +59,28 @@
             <!--  more functionality as needed -->
         </section>
 
+        <section id="attendance_sheet">
+            <h2> Attendance Sheet</h2>
+           <a href="attendance_sheet_admin.php"><button>  View</button> </a>
+          <!--<a href="add_event.php"><button class="add-btn">Add</button></a>
+           <a href="remove_event.php"><button class="remove-btn">Remove</button></a>
+             more functionality as needed -->
+        </section>
+
         <section id="event">
             <h2> Events</h2>
            <a href="event_details.php"><button>  View</button> </a>
-           <a href="add_event.php"><button class="add-btn">Add</button></a>
+          <!--<a href="add_event.php"><button class="add-btn">Add</button></a>
            <a href="remove_event.php"><button class="remove-btn">Remove</button></a>
-            <!--  more functionality as needed -->
+             more functionality as needed -->
         </section>
 
+        <section id="students">
+    <h2> Students</h2> 
+    <a href="student_details.php"><button>View</button></a>
+    <!--<a href="add_student.php"><button class="add-btn">Add</button></a>
+    <a href="remove_student.php"><button class="remove-btn">Remove</button></a> -->
+</section>
     </main>
     <footer>
         <p>&copy; 2024 Admin Dashboard</p>
