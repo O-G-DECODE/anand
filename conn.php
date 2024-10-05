@@ -74,7 +74,7 @@ if (mysqli_num_rows($table_exists) == 0) {
         echo "Error creating table: " . mysqli_error($conn);
     }
 }
-
+ 
 // Check if table exists
 $table_exists = mysqli_query($conn, "SHOW TABLES LIKE 'staff'");
 

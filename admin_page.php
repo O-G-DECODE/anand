@@ -9,6 +9,7 @@
 <body>
 <header>
     <h1>Admin Dashboard</h1>
+    <a href="logout.php"><button>Logout</button></a>
 </header>
     <nav>
         <ul>
@@ -17,16 +18,13 @@
             <li><a href="#departments">Manage Departments</a></li>
             <li><a href="#courses">Manage Courses</a></li>
             <li><a href="#clubs">Manage Clubs</a></li>
-            <li><a href="logout.php"><button>Logout</button></a></li>
+            <li><a href="#event">Manage Events</a></li>
+            <li><a href="#attendance_sheet_&_event"> Events & Attendance Sheet</a></li>
+
         </ul>
     </nav>
     <main>
-    <section id="students">
-    <h2> Students</h2> 
-    <a href="student_details.php"><button>View</button></a>
-    <a href="add_student.php"><button class="add-btn">Add</button></a>
-    <a href="remove_student.php"><button class="remove-btn">Remove</button></a>
-</section>
+   
 
 <!-- Repeat the same for other sections -->
         
@@ -61,6 +59,19 @@
             <a href="remove_club.php"><button class="remove-btn">Remove</button></a>
             <!--  more functionality as needed -->
         </section>
+        <section id="attendance_sheet_&_event">
+            <h2>Events And Attendance Sheet  </h2>
+           <a href="review_approved_event_admin.php"><button>  View</button> </a>
+          <!--<a href="add_event.php"><button class="add-btn">Add</button></a>
+           <a href="event_details.php"><button>  View</button> </a>-->
+        </section>
+
+        <section id="students">
+    <h2> Students</h2> 
+    <a href="student_details.php"><button>View</button></a>
+    <!--<a href="add_student.php"><button class="add-btn">Add</button></a>
+    <a href="remove_student.php"><button class="remove-btn">Remove</button></a> -->
+</section>
     </main>
     <footer>
         <p>&copy; 2024 Admin Dashboard</p>
