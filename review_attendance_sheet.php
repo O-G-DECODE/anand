@@ -32,32 +32,33 @@ if (mysqli_num_rows($result) > 0) {
 $query = "SELECT * FROM request WHERE approve = '$department_id'";
 $result = mysqli_query($conn, $query);
 
-// Retrieve the details of the matching event_id
+/*/ Check if the query was successful
 if (mysqli_num_rows($result) > 0) {
-    while ($row = mysqli_fetch_assoc($result)) {
-        $event_id = $row['event_id'];
-        $query = "SELECT * FROM event WHERE event_id = '$event_id'";
-        $event_result = mysqli_query($conn, $query);
-        
-        if (mysqli_num_rows($event_result) > 0) {
-            $event_row = mysqli_fetch_assoc($event_result);
-            ?>
-            <div class="event-container">
-                <h3><?= htmlspecialchars($event_row['name']) ?></h3>
-                <p><strong>Date:</strong> <?= htmlspecialchars($event_row['date']) ?></p>
-                <p><strong>Period:</strong> <?= htmlspecialchars($event_row['period']) ?></p>
-                <button class="review-btn" onclick="location.href='attendance_sheet.php?event_id=<?= $event_id ?>'">Attendance Sheet</button>
-            </div>
-            <?php
-        } else {
-            echo " Event ID not found in the event table.";
-        }
+    echo "Department ID matches the approve field in the request table.";
+}
+/ */
+// Retrieve the details of the matching event_id
+while ($row = mysqli_fetch_assoc($result)) {
+    $event_id = $row['event_id'];
+    $query = "SELECT * FROM event WHERE event_id = '$event_id'";
+    $event_result = mysqli_query($conn, $query);
+    
+    if (mysqli_num_rows($event_result) > 0) {
+        $event_row = mysqli_fetch_assoc($event_result);
+        ?>
+        <div class="event-container">
+            <h3><?= htmlspecialchars($event_row['name']) ?></h3>
+            <p><strong>Date:</strong> <?= htmlspecialchars($event_row['date']) ?></p>
+            <p><strong>Period:</strong> <?= htmlspecialchars($event_row['period']) ?></p>
+            <button class="review-btn" onclick="location.href='attendance_sheet.php?event_id=<?= $event_id ?>'">Attendance Sheet</button>
+        </div>
+        <?php
+    } else {
+        echo " Event ID not found in the event table.";
     }
-} else {
-    echo " <b>No Attendance sheets requested.</b>";
 }
 ?>
-<html>
+<!DOCTYPE html>
 <head>
     <title>Event Details</title>
     <style>

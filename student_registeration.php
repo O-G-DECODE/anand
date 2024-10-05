@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo "<script>alert('Roll number already exists!');</script>";
   } else {
     // Insert the data into the student table
-    $sql = "INSERT INTO student (roll_number, name, password, course_id, club_id) VALUES ('$roll_number', '$name', '$password', '$course_id', '0')";
+    $sql = "INSERT INTO student (roll_number, name, password, course_id , club_id) VALUES ('$roll_number', '$name', '$password', '$course_id' , 0)";
     if ($conn->query($sql) === TRUE) {
       echo "<script>alert('Registration successful!');</script>";
       header("Location: student_login.php"); // Add this line to redirect to studentlogin.php
@@ -80,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     label {
       display: block;
-      margin-bottom: 10px;
+      margin-bottom: 10px;.getElementById(...) is null
       color: #00796b; 
     }
 
@@ -106,7 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       background-color: #00796b; /* Lighter teal on hover */
     }
 
-    /* Hide all courses initially */
+    /* Hide all courses initially .getElementById(...) is null*/
     #course option {
       display: none;
     }

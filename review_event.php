@@ -12,31 +12,14 @@ if (isset($_SESSION['email'])) {
         $stmt->bind_result($staff_id);
         $stmt->fetch();
         $stmt->close();
- 
+
         // Fetch events created by this staff member
         if (isset($_GET['event_id'])) {
             $event_id = $_GET['event_id'];
-            $_SESSION['event_id'] = $event_id; // Store event_id in the session
-            
-        
 
-// Fetch the list of students who have added attendance for the event
-$stmt = $conn->prepare("
-SELECT r.roll_number, s.name as student_name, c.name as course_name
-FROM request r
-JOIN student s ON r.roll_number = s.roll_number
-JOIN course c ON s.course_id = c.course_id
-WHERE r.event_id = ?
-");
-            if ($stmt) {
-                $stmt->bind_param("i", $event_id);
-                $stmt->execute();
-                $result = $stmt->get_result();
-                
-            
 // Check if the "Approve All" button was clicked
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['approve_all'])) {
-    $event_id = $_SESSION['event_id'];
+    $event_id = $_POST['event_id'];
 
     // Update the approve column to department_id for all students associated with the event
     $stmt = $conn->prepare("UPDATE request r
@@ -44,7 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['approve_all'])) {
                             JOIN course c ON s.course_id = c.course_id
                             SET r.approve = c.department_id
                             WHERE r.event_id = ?");
-                            
     if ($stmt) {
         $stmt->bind_param("i", $event_id);
         if ($stmt->execute()) {
@@ -61,7 +43,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['approve_all'])) {
         echo "Error preparing statement: " . $conn->error;
     }
 }
-            
+            // Fetch the list of students who have added attendance for the event
+            $stmt = $conn->prepare("
+                SELECT r.roll_number, s.name as student_name, c.name as course_name
+                FROM request r
+                JOIN student s ON r.roll_number = s.roll_number
+                JOIN course c ON s.course_id = c.course_id
+                WHERE r.event_id = ?");
+            if ($stmt) {
+                $stmt->bind_param("i", $event_id);
+                $stmt->execute();
+                $result = $stmt->get_result();
 ?>
 <!DOCTYPE html>
 <html lang="en">
