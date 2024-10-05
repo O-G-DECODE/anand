@@ -123,7 +123,7 @@ if (mysqli_num_rows($table_exists) == 0) {
     $sql = "CREATE TABLE request (
         roll_number INT(12) NOT NULL,
         event_id INT(10) NOT NULL,
-        approve INT(1) NOT NULL
+        approve INT(1)  NULL
     )";
     if (mysqli_query($conn, $sql)) {
         echo "Table created successfully";
