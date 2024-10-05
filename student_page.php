@@ -49,15 +49,16 @@ if ($club_id > 0) {
     if (!empty($staff_ids)) {
         // Convert staff_ids array to a comma-separated string for SQL IN clause
         $staff_ids_str = implode(',', $staff_ids);
-        $stmt = $conn->prepare("SELECT e.name, e.date, e.period FROM event e WHERE e.staff_id IN ($staff_ids_str)");
+        $stmt = $conn->prepare("SELECT e.name, e.date, e.period, e.event_id FROM event e WHERE e.staff_id IN ($staff_ids_str)");
         if ($stmt) {
             $stmt->execute();
-            $stmt->bind_result($event_name, $event_date, $event_period);
+            $stmt->bind_result($event_name, $event_date, $event_period, $event_id);
             while ($stmt->fetch()) {
                 $events[] = [
                     'name' => htmlspecialchars($event_name),
                     'date' => htmlspecialchars($event_date),
-                    'period' => htmlspecialchars($event_period)
+                    'period' => htmlspecialchars($event_period),
+                    'event_id' => $event_id // Add event_id to the event array
                 ];
             }
             $stmt->close();
@@ -115,32 +116,6 @@ if ($club_id > 0) {
         .container h2 {
             margin-top: 0;
         }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .form-group button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            background-color: #008CBA;
-            color: #fff;
-            cursor: pointer;
-        }
-        .form-group button:hover {
-            background-color: #005f73;
-        }
         .event-list {
             margin-top: 20px;
         }
@@ -186,7 +161,12 @@ if ($club_id > 0) {
                                 <td><?php echo htmlspecialchars($event['name']); ?></td>
                                 <td><?php echo htmlspecialchars($event['date']); ?></td>
                                 <td><?php echo htmlspecialchars($event['period']); ?></td>
-                                <td><a href="attendance.php?event_name=<?php echo urlencode($event['name']); ?>"><button>Add Attendance</button></a></td><!-- Placeholder button for marking attendance -->
+                                <td>
+                                    <form method="post" action="check_attendance.php">
+                                        <input type="hidden" name="event_id" value="<?php echo htmlspecialchars($event['event_id']); ?>">
+                                        <button type="submit">Add Attendance</button>
+                                    </form>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
