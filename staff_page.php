@@ -2,23 +2,31 @@
 include("connection.php");
 session_start(); // Start the session to access session data
 
-// Initialize staff name and ID
+// Initialize staff name, ID, and club name
 $staff_name = "Staff Member";
 $staff_id = null;
+$club_name = null; // Initialize club name
 
-// Fetch the staff name and ID based on the email in the session
+// Fetch the staff name, ID, and club name based on the email in the session
 if (isset($_SESSION['email'])) {
     $email = $_SESSION['email'];
-    // Prepare and execute the query to fetch staff name and ID
-    $stmt = $conn->prepare("SELECT name, staff_id FROM staff WHERE email = ?");
+    // Prepare and execute the query to fetch staff name, ID, and club name
+    $stmt = $conn->prepare("
+        SELECT s.name, s.staff_id, c.name, c.club_id 
+        FROM staff s 
+        LEFT JOIN club c ON s.club_id = c.club_id 
+        WHERE s.email = ?
+    ");
     if ($stmt) {
         $stmt->bind_param("s", $email);
         $stmt->execute();
-        $stmt->bind_result($name, $id);
+        $stmt->bind_result($name, $id, $club, $club_id);
         if ($stmt->fetch()) {
             $staff_name = htmlspecialchars($name); // Sanitize output
             $staff_id = $id;
+            $club_name = htmlspecialchars($club); // Sanitize output
             $_SESSION['staff_id'] = $staff_id; // Store staff_id in session
+            $_SESSION['club_id'] = $club_id; // Store club_id in session
         }
         $stmt->close();
     } else {
@@ -64,11 +72,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
     <title>Staff Profile - Event Creation</title>
     <style>
         body {
@@ -145,24 +151,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background-color: #005f73;
         }
     </style>
-    
 </head>
 <body>
-    <div class="header">
-        <div>
-            <!-- Replace with actual profile picture -->
-            <span><?php echo $staff_name; ?></span>
-            <br>
-        </div>
-        <div class="profile-options">
-            <a href="#">View Profile</a>
-            <a href="event.php">Events</a>
-            <a href="#">Change Password</a>
-            <a href="review_attendance_sheet.php">Attendance Sheets</a>
+<div class="header">
+    <div>
+        <span><?php echo $staff_name; ?></span>
+        <br>
 
-        </div>
-        <a href="logout.php" class="logout-button">Logout</a> <!-- Updated to point to logout.php -->
     </div>
+    <div class="profile-options">
+        <?php if ($club_name): ?>
+            <a href="add_volunters.php">Add <?php echo $club_name ?> Student</a>
+        <?php else: ?>
+            <a href="#">View Profile</a>
+        <?php endif; ?>
+        <a href="event.php">Events</a>
+        <a href="#">Change Password</a>
+        <a href="review_attendance_sheet.php">Attendance Sheets</a>
+    </div>
+    <a href="logout.php" class="logout-button">Logout</a>
+</div>
+
 
     <div class="container">
         <h2>Create New Event</h2>
@@ -190,4 +199,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </form>
     </div>
+</body>
 </html>
