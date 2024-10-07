@@ -75,66 +75,7 @@ if ($club_id > 0) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        .header {
-            background-color: #333;
-            color: #fff;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .header .student-name {
-            flex-grow: 1;
-            text-align: center;
-            font-size: 18px;
-        }
-        .header .logout-button {
-            background-color: #e74c3c;
-            color: #fff;
-            text-decoration: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-        }
-        .header .logout-button:hover {
-            background-color: #c0392b;
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .container h2 {
-            margin-top: 0;
-        }
-        .event-list {
-            margin-top: 20px;
-        }
-        .event-list table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .event-list table, .event-list th, .event-list td {
-            border: 1px solid #ddd;
-        }
-        .event-list th, .event-list td {
-            padding: 8px;
-            text-align: left;
-        }
-        .event-list th {
-            background-color: #4CAF50; /* green background for table header */
-            color: #fff;
-        }
-    </style>
+    <link rel="stylesheet" href="style_student_page.css">
 </head>
 <body>
     <div class="header">

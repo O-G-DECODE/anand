@@ -1,5 +1,6 @@
 <?php
 include("connection.php");
+
 // Start session
 session_start();
 
@@ -13,12 +14,11 @@ if (isset($_POST['submit'])) {
     $result = $conn->query($query);
 
     if ($result->num_rows > 0) {
-        // Login successful, store email in session and redirect to dashboard page
+        // Login successful, store email in session and redirect to staff page
         $_SESSION['email'] = $email;
         header('Location: staff_page.php');
         exit;
     } else {
-        // Email or password incorrect, display error message
         echo '<script>alert("Invalid email or password!")</script>';
     }
 }
@@ -30,19 +30,20 @@ $conn->close();
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Staff Login Page</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Login</title>
+    <link rel="stylesheet" href="login_form.css">
 </head>
 <body>
     <div class="container">
-        <!-- Staff Login Section -->
         <div class="login-section">
             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
                 <h3>Staff Login</h3>
                 <input type="email" id="email" name="email" placeholder="Email" required>
                 <input type="password" id="password" name="password" placeholder="Password" required>
                 <button type="submit" name="submit" value="Login">Login</button>
-                <br> <br><a href="forget_staff.html"><u> Forget password? </u> </a>
+                <a href="forget_staff.html">Forget password?</a>
             </form>
         </div>
     </div>

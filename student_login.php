@@ -17,16 +17,13 @@ if (isset($_POST['submit'])) {
         // Roll number exists, check password
         $row = $result->fetch_assoc();
         if ($row['password'] == $password) {
-              $_SESSION['roll_number'] = $roll_number; // Corrected here
-            // Login successful, redirect to welcome page
-            header('Location: student_page.php');
+            $_SESSION['roll_number'] = $roll_number; // Store roll number in session
+            header('Location: student_page.php'); // Redirect to student page
             exit;
         } else {
-            // Password incorrect, display error message
             echo '<script>alert("Incorrect password!")</script>';
         }
     } else {
-        // Roll number does not exist, display error message
         echo '<script>alert("Roll number does not exist!")</script>';
     }
 }
@@ -38,20 +35,21 @@ $conn->close();
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title> Student Login Page</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Login</title>
+    <link rel="stylesheet" href="login_form.css">
 </head>
 <body>
     <div class="container">
-        <!-- Student Login Section -->
         <div class="login-section">
             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
                 <h3>Student Login</h3>
                 <input type="text" id="roll_number" name="roll_number" placeholder="Roll Number" required>
                 <input type="password" id="studentPassword" name="password" placeholder="Password" required>
-                <button type="submit" name="submit" value="Login">Submit</button>
-                <br> <br><a href="forgetstudent.html"><u> Forget password? </u> </a>
-                <a href="student_registeration.php"><br> <br><u> Register</u></a>
+                <button type="submit" name="submit" value="Login">Login</button>
+                <a href="forgetstudent.html">Forget password?</a>
+                <a href="student_registration.php">Register</a>
             </form>
         </div>
     </div>

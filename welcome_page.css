@@ -1,0 +1,102 @@
+ 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #e4d3ea;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #a5f5f2;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            padding: 40px;
+            color: white;
+            text-align: left;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 40px;
+        }
+
+        .role-button {
+            background-color: #ffffff;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            margin: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            width: calc(33.333% - 20px);
+            min-width: 200px;
+        }
+
+        .role-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .role-button i {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .role-button h3 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .role-button p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .student i { color: #4CAF50; }
+        .staff i { color: #2196F3; }
+        .admin i { color: #F44336; }
+
+        @media (max-width: 768px) {
+            .role-button {
+                width: calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .role-button {
+                width: 100%;
+            }
+        }

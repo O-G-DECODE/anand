@@ -1,5 +1,4 @@
 <?php
-// Include the connection file
 include 'connection.php';
 
 // Check if the form is submitted
@@ -9,7 +8,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // SQL query to fetch staff_id from staff table corresponding to email
     $sql = "SELECT staff_id FROM staff WHERE email = '$email' AND password = '$password'";
-
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -37,25 +35,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staff Login</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="login_form.css">
 </head>
 <body>
-<div class="container">
-    
-    <div class="login-section">
-
-    <?php if (isset($error)) { echo "<p>$error</p>"; } ?>
-
-    <form method="post">
-    <h3>Admin Login</h3>
-        
-        <input type="email" id="email" name="email" placeholder="Email" required><br>
-        <input type="password" id="password" name="password" placeholder="Password" require><br>
-        <button type="submit" name="submit" value="Login">Login</button>
-    </form>
+    <div class="container">
+        <div class="login-section">
+            <?php if (isset($error)) { echo "<p>$error</p>"; } ?>
+            <form method="post">
+                <h3>Admin Login</h3>
+                <input type="email" id="email" name="email" placeholder="Email" required><br>
+                <input type="password" id="password" name="password" placeholder="Password" required><br>
+                <button type="submit" name="submit" value="Login">Login</button>
+            </form>
+        </div>
     </div>
-</div>
 </body>
 </html>
 

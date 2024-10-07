@@ -1,21 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Buttons Page</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Our Platform</title>
+    <link rel="stylesheet" href="welcome_page.css">
+    </head>
 <body>
-    <div class="button-container">
-        <h3>Are you</h3>
-        <a href="student_login.php">
-            <button class="button student"><b>Student</b></button>
-        </a>
-        <a href="staff_login.php">
-            <button class="button staff"><b>Staff</b></button>
-        </a>
-        <a href="admin_login.php">
-            <button class="button admin"><b>Admin</b></button>
-        </a>
+    <div class="container">
+        <div class="header">
+            <h1>Welcome to Attendance Managment System (AMS)</h1>
+            <p>Choose your role to get started</p>
+        </div>
+        <div class="button-container">
+            <a href="student_login.php" class="role-button student">
+                <i class="fas fa-user-graduate"></i>
+                <h3>Student</h3>
+                <p>Check your events or add attendance</p>
+            </a>
+            <a href="staff_login.php" class="role-button staff">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <h3>Staff</h3>
+                <p>Manage events and attendance sheets</p>
+            </a>
+            <a href="admin_login.php" class="role-button admin">
+                <i class="fas fa-user-cog"></i>
+                <h3>Admin</h3>
+                <p>Oversee system operations</p>
+            </a>
+        </div>
     </div>
 </body>
 </html>

@@ -66,7 +66,7 @@ while ($row = mysqli_fetch_assoc($result)) {
             display: flex;
             flex-wrap: wrap;
             justify-content: center; /* Center the containers */
-            background-color: #f9f9f9; /* Light background */
+            background-color: e4d3ea; /* Light background */
             font-family: Arial, sans-serif; /* Font styling */
         }
 
