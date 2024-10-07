@@ -50,10 +50,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty($event_name) || empty($event_date) || empty($event_period_string)) {
             echo "Please fill all fields!";
         } else {
+            // Get current date (YYYY-MM-DD) for the create_date field
+            $currentDate = date('Y-m-d');
+
             // Prepare and bind
-            $stmt = $conn->prepare("INSERT INTO event (name, date, period, staff_id) VALUES (?, ?, ?, ?)");
+            $stmt = $conn->prepare("INSERT INTO event (name, date, period, staff_id, create_date) VALUES (?, ?, ?, ?, ?)");
             if ($stmt) {
-                $stmt->bind_param("sssi", $event_name, $event_date, $event_period_string, $staff_id);
+                // Bind parameters including the current date
+                $stmt->bind_param("sssis", $event_name, $event_date, $event_period_string, $staff_id, $currentDate);
 
                 // Execute statement
                 if ($stmt->execute()) {
