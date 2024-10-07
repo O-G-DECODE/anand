@@ -94,6 +94,7 @@ if ($club_id > 0) {
                             <th>Date</th>
                             <th>Period</th>
                             <th>Action</th>
+                           
                         </tr>
                     </thead>
                     <tbody>
