@@ -171,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_all'])) {
     exit(); // Ensure no further code is executed
 }
 
-?>
+?> 
 
 <!DOCTYPE html>
 <html lang="en">

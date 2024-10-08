@@ -142,7 +142,7 @@ caption {
                             </form>
                             <form method='get' action='review_event.php' style='display:inline;'>
                                 <input type='hidden' name='event_id' value='$event_id'>
-                                <button type='submit' class='btn-review'>Review</button>
+                                <button type='submit' class='btn-review'>Mark Attendance</button>
                             </form>
                         </td>
                       </tr>";

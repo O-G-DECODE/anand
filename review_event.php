@@ -5,7 +5,7 @@ session_start(); // Ensure the session is started to access session data
 // Retrieve the email from the session
 if (isset($_SESSION['email'])) {
     $email = $_SESSION['email'];
-    
+
     // Fetch the staff_id of the staff member from the staff table
     $stmt = $conn->prepare("SELECT staff_id FROM staff WHERE email = ?");
     if ($stmt) {
@@ -36,20 +36,36 @@ if (isset($_SESSION['email'])) {
                         // Display message that approval already exists
                         echo "<script>alert('You have already approved some requests for this event.');</script>";
                     } else {
-                        // Update the approve column to department_id for all students associated with the event
-                        $stmt = $conn->prepare("UPDATE request r
-                                                JOIN student s ON r.roll_number = s.roll_number
-                                                JOIN course c ON s.course_id = c.course_id
-                                                SET r.approve = c.department_id
-                                                WHERE r.event_id = ?");
+                        // Insert the current date and event_id into the 'day' table with type=2
+                        $stmt = $conn->prepare("INSERT INTO day (date, type, event_id) VALUES (CURDATE(), 2, ?)");
                         if ($stmt) {
                             $stmt->bind_param("i", $event_id);
                             if ($stmt->execute()) {
-                                // Display success message as a JavaScript alert
-                                echo "<script>alert('All students have been approved successfully!');</script>";
-                                // Redirect back to the review event page after approval
-                                echo "<meta http-equiv='refresh' content='0;url=event.php?event_id=" . urlencode($event_id) . "'>";
-                                exit();
+                                // Get the inserted date_id
+                                $date_id = $stmt->insert_id;
+
+                                // Update the approve column to department_id for all students associated with the event
+                                // And insert the date_id into the request table
+                                $stmt = $conn->prepare("UPDATE request r
+                                                        JOIN student s ON r.roll_number = s.roll_number
+                                                        JOIN course c ON s.course_id = c.course_id
+                                                        SET r.approve = c.department_id, r.date_id = ?
+                                                        WHERE r.event_id = ?");
+                                if ($stmt) {
+                                    $stmt->bind_param("ii", $date_id, $event_id);
+                                    if ($stmt->execute()) {
+                                        // Display success message as a JavaScript alert
+                                        echo "<script>alert('All students have been approved successfully!');</script>";
+                                        // Redirect back to the review event page after approval
+                                        echo "<meta http-equiv='refresh' content='0;url=event.php?event_id=" . urlencode($event_id) . "'>";
+                                        exit();
+                                    } else {
+                                        echo "Error executing query: " . $stmt->error;
+                                    }
+                                    $stmt->close();
+                                } else {
+                                    echo "Error preparing statement: " . $conn->error;
+                                }
                             } else {
                                 echo "Error executing query: " . $stmt->error;
                             }
