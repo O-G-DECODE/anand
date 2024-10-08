@@ -5,6 +5,11 @@ include("connection.php");
 // Start the session
 session_start();
 
+if (!isset($_SESSION['event_id']) && isset($_GET['event_id'])) {
+    $event_id = $_GET['event_id'];
+    $_SESSION['event_id'] = $event_id; // Store the event_id in the session
+}
+
 // Handle the AJAX request to fetch student details
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['rollNumber'])) {
     $rollNumber = $_POST['rollNumber'];
@@ -83,14 +88,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_all'])) {
         echo json_encode(array('status' => 'error', 'message' => 'Event ID not found in session.'));
         exit();
     }
-    $event_id = $_SESSION['event_id'];
+    $event_id = $_SESSION['event_id'];  // Retrieve event_id from the session
     $roll_numbers = isset($_POST['roll_numbers']) ? json_decode($_POST['roll_numbers'], true) : array(); // Decode JSON array of roll numbers
 
     if (empty($roll_numbers)) {
         echo json_encode(array('status' => 'error', 'message' => 'No roll numbers provided.'));
         exit();
     }
+
+    // Step 1: Insert the current date, event_id, and type into the 'day' table
+    $current_date = date('Y-m-d'); // Get current date in 'YYYY-MM-DD' format
+    $insertDaySql = "INSERT INTO day (date, event_id, type) VALUES (?, ?, 1)";
+    $insertDayStmt = $conn->prepare($insertDaySql);
+    if (!$insertDayStmt) {
+        error_log("Prepare statement for day table failed: " . $conn->error);
+        echo json_encode(array('status' => 'error', 'message' => 'Database prepare failed for day table.'));
+        exit();
+    }
+    $insertDayStmt->bind_param("si", $current_date, $event_id); // Bind the date and event_id to the query
+    if (!$insertDayStmt->execute()) {
+        error_log("Execute failed for day table: " . $insertDayStmt->error);
+        echo json_encode(array('status' => 'error', 'message' => 'Failed to insert day entry.'));
+        exit();
+    }
     
+    // Step 2: Retrieve the last inserted 'date_id' from the 'day' table
+    $date_id = $insertDayStmt->insert_id; // Get the auto-incremented ID from the last insert
+    $insertDayStmt->close();
+
     // Prepare the query to check existing entries
     $checkSql = "SELECT COUNT(*) as count FROM request WHERE roll_number = ? AND event_id = ?";
     $checkStmt = $conn->prepare($checkSql);
@@ -100,8 +125,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_all'])) {
         exit();
     }
 
-    // Prepare the query to insert into the request table
-    $insertSql = "INSERT INTO request (roll_number, event_id) VALUES (?, ? )";
+    // Step 3: Prepare the query to insert into the request table (including date_id)
+    $insertSql = "INSERT INTO request (roll_number, event_id, date_id) VALUES (?, ?, ?)";
     $insertStmt = $conn->prepare($insertSql);
     if (!$insertStmt) {
         error_log("Prepare statement failed: " . $conn->error);
@@ -124,8 +149,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_all'])) {
             $messages[] = "Roll number $rollNumber has already submitted attendance.";
             $success = false;
         } else {
-            // Insert the new entry
-            $insertStmt->bind_param("si", $rollNumber, $event_id);
+            // Step 4: Insert the new entry into the 'request' table, including the 'date_id'
+            $insertStmt->bind_param("sii", $rollNumber, $event_id, $date_id);
             if (!$insertStmt->execute()) {
                 error_log("Execute failed: " . $insertStmt->error);
                 $messages[] = "Failed to insert roll number $rollNumber.";
@@ -145,6 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_all'])) {
     }
     exit(); // Ensure no further code is executed
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -271,7 +297,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_all'])) {
                         } catch (e) {
                             console.error("Error parsing JSON response:", e);
                         }
-                    } else {
+                    } else { 
                         console.error("AJAX request failed with status:", xhr.status);
                     }
                 }
