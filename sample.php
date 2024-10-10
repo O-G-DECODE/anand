@@ -1,199 +1,197 @@
-<?php
-// Include the database connection file
+<?php // review_event.php
 include("connection.php");
+session_start(); // Ensure the session is started to access session data
 
-// Handle the AJAX request if roll number and event_id are provided
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['rollNumber']) && isset($_POST['event_id'])) {
-    $rollNumber = $_POST['rollNumber'];
-    $eventId = $_POST['event_id'];
-    error_log("Received roll number: " . $rollNumber . " and event_id: " . $eventId); // Debugging line
+// Retrieve the email from the session
+if (isset($_SESSION['email'])) {
+    $email = $_SESSION['email'];
 
-    // Prepare and execute the query to fetch student details
-    $sql = "SELECT s.name as student_name, c.name as course_name, d.name as department_name
-            FROM student s
-            JOIN course c ON s.course_id = c.course_id
-            JOIN department d ON c.department_id = d.department_id
-            WHERE s.roll_number = ?";
-
-    $stmt = $conn->prepare($sql);
-    if (!$stmt) {
-        error_log("Prepare statement failed: " . $conn->error);
-        echo json_encode(array('status' => 'error', 'message' => 'Database prepare failed.'));
-        exit();
-    }
-    $stmt->bind_param("s", $rollNumber);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    // Check if any record was found
-    if ($row = $result->fetch_assoc()) {
-        echo json_encode(array(
-            'status' => 'registered',
-            'student_name' => $row['student_name'],
-            'course_name' => $row['course_name'],
-            'department_name' => $row['department_name']
-        )); // Roll number exists
-    } else {
-        echo json_encode(array('status' => 'not_registered')); // Roll number does not exist
-    }
-
-    // Close connections
-    $stmt->close();
-    $conn->close();
-    exit(); // Ensure no further code is executed
-}
-
-// Handle the AJAX request to get event_id
-if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['event_name'])) {
-    $event_name = $_GET['event_name'];
-    
-    // Prepare and execute the query to fetch the event_id based on event_name
-    if (!empty($event_name)) {
-        $sql = "SELECT event_id FROM event WHERE name = ?";
-
-        $stmt = $conn->prepare($sql);
-        if (!$stmt) {
-            error_log("Prepare statement failed: " . $conn->error);
-            echo json_encode(array('status' => 'error', 'message' => 'Database prepare failed.'));
-            exit();
-        }
-        $stmt->bind_param("s", $event_name);
+    // Fetch the staff_id of the staff member from the staff table
+    $stmt = $conn->prepare("SELECT staff_id FROM staff WHERE email = ?");
+    if ($stmt) {
+        $stmt->bind_param("s", $email);
         $stmt->execute();
-        $result = $stmt->get_result();
-
-        // Check if the event was found
-        if ($row = $result->fetch_assoc()) {
-            echo "Event ID: " . htmlspecialchars($row['event_id']);
-        } else {
-            echo "No event found with the given name.";
-        }
-
-        // Close connections
+        $stmt->bind_result($staff_id);
+        $stmt->fetch();
         $stmt->close();
-    }
-}
+
+        // Fetch events created by this staff member
+        if (isset($_GET['event_id'])) {
+            $event_id = $_GET['event_id'];
+
+            // Check if the "Approve All" button was clicked
+            if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['approve_all'])) {
+                // Check if any request for this event is already approved
+                $stmt = $conn->prepare("SELECT COUNT(*) FROM request WHERE event_id = ? AND approve IS NOT NULL");
+                if ($stmt) {
+                    $stmt->bind_param("i", $event_id);
+                    $stmt->execute();
+                    $stmt->bind_result($count);
+                    $stmt->fetch();
+                    $stmt->close();
+
+                    if ($count > 0) {
+                        // Display message that approval already exists
+                        echo "<script>alert('You have already approved some requests for this event.');</script>";
+                    } else {
+                        // Fetch the date_id from the request table for the given event_id
+                        $stmt = $conn->prepare("SELECT date_id FROM request WHERE event_id = ?");
+                        if ($stmt) {
+                            $stmt->bind_param("i", $event_id);
+                            $stmt->execute();
+                            $stmt->bind_result($date_id);
+                            $stmt->fetch();
+                            $stmt->close();
+
+                            // Retrieve the corresponding date from the day table
+                            $stmt = $conn->prepare("SELECT date FROM day WHERE date_id = ?");
+                            if ($stmt) {
+                                $stmt->bind_param("i", $date_id);
+                                $stmt->execute();
+                                $stmt->bind_result($event_date);
+                                $stmt->fetch();
+                                $stmt->close();
+
+                                // Check if the date is more than 7 days from today
+                                $current_date = new DateTime();
+                                $event_date_obj = new DateTime($event_date);
+                                $interval = $current_date->diff($event_date_obj);
+
+                                if ($interval->days > 7) {
+                                    // Show a script that the event is expired
+                                    echo "<script>alert('The event has expired.');</script>";
+                                    exit();
+                                } else {
+                                    // Insert the current date and event_id into the 'day' table with type=2
+                                    $stmt = $conn->prepare("INSERT INTO day (date, type, event_id) VALUES (CURDATE(), 2, ?)");
+                                    if ($stmt) {
+                                        $stmt->bind_param("i", $event_id);
+                                        if ($stmt->execute()) {
+                                            // Get the inserted date_id
+                                            $date_id = $stmt->insert_id;
+
+                                            // Update the approve column to department_id for all students associated with the event
+                                            // And insert the date_id into the request table
+                                            $stmt = $conn->prepare("UPDATE request r
+                                                                    JOIN student s ON r.roll_number = s.roll_number
+                                                                    JOIN course c ON s.course_id = c.course_id
+                                                                    SET r.approve = c.department_id, r.date_id = ?
+                                                                    WHERE r.event_id = ?");
+                                            if ($stmt) {
+                                                $stmt->bind_param("ii", $date_id, $event_id);
+                                                if ($stmt->execute()) {
+                                                    // Display success message as a JavaScript alert
+                                                    echo "<script>alert('All students have been approved successfully!');</script>";
+                                                    // Redirect back to the review event page after approval
+                                                    echo "<meta http-equiv='refresh' content='0;url=event.php?event_id=" . urlencode($event_id) . "'>";
+                                                    exit();
+                                                } else {
+                                                    echo "Error executing query: " . $stmt->error;
+                                                }
+                                                $stmt->close();
+                                            } else {
+                                                echo "Error preparing statement: " . $conn->error;
+                                            }
+                                        } else {
+                                            echo "Error executing query: " . $stmt->error;
+                                        }
+                                        $stmt->close();
+                                    } else {
+                                        echo "Error preparing statement: " . $conn->error;
+                                    }
+                                }
+                            } else {
+                                echo "Error preparing statement: " . $conn->error;
+                            }
+                        } else {
+                            echo "Error preparing statement: " . $conn->error;
+                        }
+                    }
+                } else {
+                    echo "Error preparing statement: " . $conn->error;
+                }
+            }
+
+            // Fetch the list of students who have added attendance for the event
+            $stmt = $conn->prepare("
+                SELECT r.roll_number, s.name as student_name, c.name as course_name
+                FROM request r
+                JOIN student s ON r.roll_number = s.roll_number
+                JOIN course c ON s.course_id = c.course_id
+                WHERE r.event_id = ?");
+            if ($stmt) {
+                $stmt->bind_param("i", $event_id);
+                $stmt->execute();
+                $result = $stmt->get_result();
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Table</title> 
-    <link rel="stylesheet" type="text/css" href="studentstyle.css">
-    <script>
-        let rowIndex = 1;
-
-        function validateRollNumber(form, index) {
-            var rollNumber = form.rollNumber.value;
-            var eventId = document.querySelector("input[name='event_id']").value;
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "", true); // Use the same PHP file
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        try {
-                            var response = JSON.parse(xhr.responseText);
-                            var row = document.querySelector(`#row-${index}`);
-                            if (response.status === "not_registered") {
-                                alert("Roll number not registered.");
-                                row.querySelector(".student-name").textContent = "";
-                                row.querySelector(".course-name").textContent = "";
-                                row.querySelector(".department-name").textContent = "";
-                            } else if (response.status === "registered") {
-                                row.querySelector(".student-name").textContent = response.student_name;
-                                row.querySelector(".course-name").textContent = response.course_name;
-                                row.querySelector(".department-name").textContent = response.department_name;
-                            }
-                        } catch (e) {
-                            console.error("Error parsing JSON response:", e);
-                        }
-                    } else {
-                        console.error("AJAX request failed with status:", xhr.status);
-                    }
-                }
-            };
-            xhr.send("rollNumber=" + encodeURIComponent(rollNumber) + "&event_id=" + encodeURIComponent(eventId));
-            return false; // Prevent form submission
-        }
-
-        function addRow() {
-            rowIndex++;
-            var tableBody = document.querySelector("tbody");
-            var newRow = document.createElement("tr");
-            newRow.id = `row-${rowIndex}`;
-            newRow.innerHTML = `
-                <td>
-                    <form onsubmit="return validateRollNumber(this, ${rowIndex});">
-                        <input type="text" name="rollNumber" class="input-field" placeholder="Enter Roll Number" oninput="updateYearHeading()">
-                        <input type="submit" class="action-button check-button" value="Check">
-                    </form>
-                </td>
-                <td class="student-name"></td>
-                <td class="course-name"></td>
-                <td class="department-name"></td>
-                <td class="year-heading">---</td>
-                <td><button class="action-button remove-button" onclick="removeRow(${rowIndex})">Remove</button></td>
-            `;
-            tableBody.appendChild(newRow);
-        }
-
-        function removeRow(index) {
-            var row = document.querySelector(`#row-${index}`);
-            row.remove();
-        }
-
-        function getYearHeading(rollNumber) {
-            // Extract the first two digits of the roll number
-            var prefix = rollNumber.substring(0, 2);
-            var year = '20' + prefix;
-            return year;
-        }
-
-        function updateYearHeading() {
-            var rows = document.querySelectorAll("tbody tr");
-            rows.forEach(row => {
-                var rollNumberInput = row.querySelector("input[name='rollNumber']");
-                if (rollNumberInput) {
-                    var yearHeading = getYearHeading(rollNumberInput.value);
-                    row.querySelector(".year-heading").textContent = yearHeading;
-                }
-            });
-        }
-    </script>
+    <title>Review Event</title>
+    <link rel="stylesheet" type="text/css" href="event_style.css">
 </head>
 <body>
-    <h1>Student Information</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Roll Number</th>
-                <th>Name</th>
-                <th>Course</th>
-                <th>Department</th>
-                <th>Year</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr id="row-1">
-                <td>
-                    <form onsubmit="return validateRollNumber(this, 1);">
-                        <input type="text" name="rollNumber" class="input-field" placeholder="Enter Roll Number" oninput="updateYearHeading()">
-                        <input type="submit" class="action-button check-button" value="Check">
-                    </form>
-                </td>
-                <td class="student-name"></td>
-                <td class="course-name"></td>
-                <td class="department-name"></td>
-                <td class="year-heading">---</td>
-                <td><button class="action-button remove-button" onclick="removeRow(1)">Remove</button></td>
-            </tr>
-            <!-- Additional rows can be added here -->
-        </tbody>
-    </table>
-    <input type="hidden" name="event_id" value="<?php echo isset($_GET['event_id']) ? htmlspecialchars($_GET['event_id']) : ''; ?>">
-    <button class="action-button add-button" onclick="addRow()">Add</button>
-    <button class="action-button submit-all-button" onclick="submitAll()">Submit All</button>
+    <div class="container">
+        <h2>Review Event</h2>
+        <!-- Approve All Button -->
+        <form method="post" action="" style="margin-bottom: 20px;">
+            <input type="hidden" name="event_id" value="<?php echo $event_id; ?>">
+            <button type="submit" name="approve_all" class="btn-approve-all">Approve All</button>
+        </form>
+        
+        <table>
+            <caption>Students who have added attendance</caption>
+            <thead>
+                <tr>
+                    <th>Roll Number</th>
+                    <th>Name</th>
+                    <th>Course</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+<?php
+                while ($row = $result->fetch_assoc()) {
+                    $roll_number = htmlspecialchars($row['roll_number']);
+                    $student_name = htmlspecialchars($row['student_name']);
+                    $course_name = htmlspecialchars($row['course_name']);
+                    echo "<tr>
+                            <td>$roll_number</td>
+                            <td>$student_name</td>
+                            <td>$course_name</td>
+                            <td>
+                                <form method='post' action='remove_student.php' style='display:inline;'>
+                                    <input type='hidden' name='event_id' value='$event_id'>
+                                    <input type='hidden' name='roll_number' value='$roll_number'>
+                                    <button type='submit' class='btn-remove'>Remove</button>
+                                </form>
+                            </td>
+                          </tr>";
+                }
+?>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
+
+<?php
+                $stmt->close();
+            } else {
+                echo "Error preparing statement: " . $conn->error;
+            }
+        } else {
+            echo "No event ID specified.";
+        }
+    } else {
+        echo "Error preparing statement: " . $conn->error;
+    }
+} else {
+    echo "No user is logged in.";
+}
+
+// Close connection
+$conn->close();
+?>
