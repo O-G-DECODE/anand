@@ -2,7 +2,7 @@
     --primary-color: #5A67D8; /* A modern shade of purple */
     --secondary-color: #7F9CF5;
     --accent-color: #ED64A6; /* Vibrant pink for accents */
-    --background-color: #f4f4f4;
+    --background-color: #a4dbeb;
     --text-color: #2d3748; /* Dark gray for better contrast */
     --card-background: #ffffff;
     --button-hover-darken: rgba(0, 0, 0, 0.1);
@@ -76,7 +76,7 @@
   }
   
   .remove-button {
-    background-color: #F56565; /* A modern red */
+    background-color: #af2d61; /* A modern red */
     border-radius:20px;
   }
   
@@ -101,7 +101,7 @@
   }
   
   .add-button {
-    background-color: #0c8328; /* A vibrant green */
+    background-color: #b450e3b7; /* A vibrant green */
     padding: 12px 24px;
     font-size: 16px;
     margin-right: 10px;
@@ -115,7 +115,7 @@
   }
   
   .submit-all-button {
-    background-color: #532f64b7; /* A bright orange */
+    background-color: #b450e3b7; /* A bright orange */
     padding: 12px 24px;
     font-size: 16px;
     border-radius: 20px;

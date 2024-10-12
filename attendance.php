@@ -307,7 +307,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_all'])) {
     </script>
 </head>
 <body>
-    <h2>Student Information</h2>
+     <br>
     <table>
         <thead>
             <tr>
