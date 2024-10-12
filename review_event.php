@@ -36,40 +36,75 @@ if (isset($_SESSION['email'])) {
                         // Display message that approval already exists
                         echo "<script>alert('You have already approved some requests for this event.');</script>";
                     } else {
-                        // Insert the current date and event_id into the 'day' table with type=2
-                        $stmt = $conn->prepare("INSERT INTO day (date, type, event_id) VALUES (CURDATE(), 2, ?)");
+                        // New logic: Fetch the event creation date from the 'day' table where type = 1
+                        $stmt = $conn->prepare("SELECT `date` FROM day WHERE event_id = ? AND type = 1");
                         if ($stmt) {
                             $stmt->bind_param("i", $event_id);
-                            if ($stmt->execute()) {
-                                // Get the inserted date_id
-                                $date_id = $stmt->insert_id;
+                            $stmt->execute();
+                            $stmt->bind_result($event_date);
+                            $stmt->fetch();
+                            $stmt->close();
 
-                                // Update the approve column to department_id for all students associated with the event
-                                // And insert the date_id into the request table
-                                $stmt = $conn->prepare("UPDATE request r
-                                                        JOIN student s ON r.roll_number = s.roll_number
-                                                        JOIN course c ON s.course_id = c.course_id
-                                                        SET r.approve = c.department_id, r.date_id = ?
-                                                        WHERE r.event_id = ?");
-                                if ($stmt) {
-                                    $stmt->bind_param("ii", $date_id, $event_id);
-                                    if ($stmt->execute()) {
-                                        // Display success message as a JavaScript alert
-                                        echo "<script>alert('All students have been approved successfully!');</script>";
-                                        // Redirect back to the review event page after approval
-                                        echo "<meta http-equiv='refresh' content='0;url=event.php?event_id=" . urlencode($event_id) . "'>";
-                                        exit();
-                                    } else {
-                                        echo "Error executing query: " . $stmt->error;
-                                    }
-                                    $stmt->close();
+                            if ($event_date) {
+                                // Convert event_date to DateTime and get the current date
+                                $create_date = new DateTime($event_date);
+                                $current_date = new DateTime();
+                                
+                                // Calculate the difference in days
+                                $interval = $create_date->diff($current_date);
+                                $days_difference = $interval->days;
+
+                                if ($days_difference > 7) {
+                                    // Event is expired (created more than 7 days ago)
+                                    echo "<script>
+                                        alert('Event has expired.');
+                                        window.location.href = 'event.php';
+                                    </script>";
+                                    exit(); // Stop further execution if event is expired
                                 } else {
-                                    echo "Error preparing statement: " . $conn->error;
+                                    // Event is still valid, proceed to further approval steps
+                                    
+                                    // Insert the current date and event_id into the 'day' table with type=2
+                                    $stmt = $conn->prepare("INSERT INTO day (date, type, event_id) VALUES (CURDATE(), 2, ?)");
+                                    if ($stmt) {
+                                        $stmt->bind_param("i", $event_id);
+                                        if ($stmt->execute()) {
+                                            // Get the inserted date_id
+                                            $date_id = $stmt->insert_id;
+
+                                            // Update the approve column to department_id for all students associated with the event
+                                            // And insert the date_id into the request table
+                                            $stmt = $conn->prepare("UPDATE request r
+                                                                    JOIN student s ON r.roll_number = s.roll_number
+                                                                    JOIN course c ON s.course_id = c.course_id
+                                                                    SET r.approve = c.department_id, r.date_id = ?
+                                                                    WHERE r.event_id = ?");
+                                            if ($stmt) {
+                                                $stmt->bind_param("ii", $date_id, $event_id);
+                                                if ($stmt->execute()) {
+                                                    // Display success message as a JavaScript alert
+                                                    echo "<script>alert('All students have been approved successfully!');</script>";
+                                                    // Redirect back to the review event page after approval
+                                                    echo "<meta http-equiv='refresh' content='0;url=event.php?event_id=" . urlencode($event_id) . "'>";
+                                                    exit();
+                                                } else {
+                                                    echo "Error executing query: " . $stmt->error;
+                                                }
+                                                $stmt->close();
+                                            } else {
+                                                echo "Error preparing statement: " . $conn->error;
+                                            }
+                                        } else {
+                                            echo "Error executing query: " . $stmt->error;
+                                        }
+                                        $stmt->close();
+                                    } else {
+                                        echo "Error preparing statement: " . $conn->error;
+                                    }
                                 }
                             } else {
-                                echo "Error executing query: " . $stmt->error;
+                                echo "No creation date found for this event.";
                             }
-                            $stmt->close();
                         } else {
                             echo "Error preparing statement: " . $conn->error;
                         }
