@@ -144,7 +144,7 @@ if (isset($_SESSION['email'])) {
         </form>
         
         <table>
-            <caption>Students who have added attendance</caption>
+            
             <thead>
                 <tr>
                     <th>Roll Number</th>

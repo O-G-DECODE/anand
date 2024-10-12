@@ -1,81 +1,130 @@
-body {
-    font-family: Arial, sans-serif;
+:root {
+    --primary-color: #5A67D8; /* A modern shade of purple */
+    --secondary-color: #7F9CF5;
+    --accent-color: #ED64A6; /* Vibrant pink for accents */
+    --background-color: #f4f4f4;
+    --text-color: #2d3748; /* Dark gray for better contrast */
+    --card-background: #ffffff;
+    --button-hover-darken: rgba(0, 0, 0, 0.1);
+  }
+  
+  body {
+    font-family: 'Poppins', sans-serif;
     margin: 20px;
-}
-
-table {
+    background-color: var(--background-color);
+    color: var(--text-color);
+  }
+  
+  table {
     width: 100%;
     border-collapse: collapse;
-}
-
-table, th, td {
-    border: 1px solid #ddd;
-}
-
-th, td {
-    padding: 8px;
-    text-align: left;
-}
-
-th {
-    background-color: #f2f2f2;
-}
-
-.action-button {
-    border: none;
-    color: white;
-    padding: 8px 16px;
+    background-color: var(--card-background);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  
+  table, th, td {
+    border: 1px solid #e2e8f0;
+  }
+  
+  th, td {
+    padding: 15px;
     text-align: center;
-    text-decoration: none;
-    display: inline-block;
+    font-size: 1em;
+  }
+  
+  th {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f7fafc;
+  }
+  
+  tr:hover {
+    background-color: #edf2f7;
+  }
+  
+  .action-button {
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
     font-size: 14px;
-    margin: 4px 2px;
     cursor: pointer;
-    border-radius: 4px;
-}
-
-.check-button {
-    background-color: #4CAF50; /* Green */
-}
-
-.check-button:hover {
-    background-color: #45a049;
-}
-
-.remove-button {
-    background-color: #f44336; /* Red */
-}
-
-.remove-button:hover {
-    background-color: #d32f2f;
-}
-
-.input-field {
-    width: 200px; /* Adjusted width of the roll number input field */
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .action-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  .check-button {
+    background-color: #38B2AC; /* A modern teal */
+    border-radius:20px;
+  }
+  
+  .check-button:hover {
+    background-color: #319795; /* Darker teal on hover */
+  }
+  
+  .remove-button {
+    background-color: #F56565; /* A modern red */
+    border-radius:20px;
+  }
+  
+  .remove-button:hover {
+    background-color: #E53E3E; /* Darker red on hover */
+  }
+  
+  .input-field {
+    width: 200px;
     box-sizing: border-box;
-    padding: 4px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-.add-button {
-    background-color: #008CBA; /* Blue */
+    padding: 12px;
+    border: 2px solid var(--secondary-color);
+    border-radius: 20px;
+    transition: border-color 0.3s ease;
+    background-color: #edf2f7;
+  }
+  
+  .input-field:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 6px rgba(90, 103, 216, 0.2);
+    outline: none;
+  }
+  
+  .add-button {
+    background-color: #0c8328; /* A vibrant green */
     padding: 12px 24px;
     font-size: 16px;
-    display: inline-block;
-    margin-right: 10px; /* Add some space between Add and Submit All button */
-}
-
-.add-button:hover {
-    background-color: #007bb5;
-}
-
-.submit-all-button {
-    background-color: #f39c12; /* Orange */
+    margin-right: 10px;
+    border-radius: 20px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .add-button:hover {
+    background-color: #39a15de7;
+    transform: translateY(-2px);
+  }
+  
+  .submit-all-button {
+    background-color: #532f64b7; /* A bright orange */
     padding: 12px 24px;
     font-size: 16px;
-}
-
-.submit-all-button:hover {
-    background-color: #e67e22;
-}
+    border-radius: 20px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .submit-all-button:hover {
+    background-color: #56456e;
+    transform: translateY(-2px);
+  }
+  
+  

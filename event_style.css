@@ -1,59 +1,115 @@
+:root {
+    --primary-color: #6c5ce7;
+    --secondary-color: #a29bfe;
+    --accent-color: #fd79a8;
+    --background-color: #f9f9f9;
+    --text-color: #2d3436;
+    --card-background: #ffffff;
+}
 
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-        th {
-            background-color: #3498db;
-            color: #fff;
-        }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        tr:hover {
-            background-color: #ddd;
-        }
-        caption {
-            font-size: 1.5em;
-            margin: 10px 0;
-        }
-        .btn-remove, .btn-approve-all {
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 0.9em;
-        }
-        .btn-remove {
-            background-color: #e74c3c;
-            color: white;
-        }
-        .btn-remove:hover {
-            background-color: #c0392b;
-        }
-        .btn-approve-all {
-            background-color: #2ecc71;
-            color: white;
-        }
-        .btn-approve-all:hover {
-            background-color: #27ae60;
-        }
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #e4d3ea;
+    margin: 0;
+    padding: 20px;
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: var(--card-background);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, var(--secondary-color) 0%, transparent 70%);
+    opacity: 0.1;
+    z-index: -1;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border: 1px solid #ddd;
+    font-size: 1em;
+}
+
+th {
+    background-color: var(--primary-color);
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+tr:nth-child(even) {
+    background-color: var(--background-color);
+}
+
+tr:hover {
+    background-color: rgba(172, 160, 255, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+caption {
+    font-size: 1.8em;
+    margin: 20px 0;
+    color: var(--primary-color);
+}
+
+.btn-remove, .btn-approve-all {
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 10px;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-remove {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.btn-remove:hover {
+    background-color: #ff6385;
+}
+
+.btn-approve-all {
+    background-color:rgb(96, 187, 129);
+    color: white;
+}
+
+.btn-approve-all:hover {
+    background-color: #029d29;
+}
+
+/* Animation */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.container {
+    animation: float 6s ease-in-out infinite;
+}

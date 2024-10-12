@@ -62,53 +62,72 @@ while ($row = mysqli_fetch_assoc($result)) {
 <head>
     <title>Event Details</title>
     <style>
-        body {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center; /* Center the containers */
-            background-color: e4d3ea; /* Light background */
-            font-family: Arial, sans-serif; /* Font styling */
-        }
+        :root {
+  --primary-color: #6C5CE7; /* Vibrant purple */
+  --secondary-color: #7F9CF5; /* Light purple */
+  --accent-color: #ED64A6; /* Vibrant pink */
+  --background-color: #e4d3ea; /* Light lavender background */
+  --text-color: #2d3436; /* Dark gray for text */
+  --card-background: #ffffff; /* White for card backgrounds */
+  --button-hover-darken: rgba(0, 0, 0, 0.1); /* Subtle darkening effect */
+}
 
-        .event-container {
-            display: flex;
-            flex-direction: column; /* Vertical stacking */
-            justify-content: space-between; /* Space out content */
-            width: 250px; /* Set a fixed width */
-            height: 200px; /* Set a fixed height */
-            margin: 15px; /* Margin for spacing */
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            background-color: #ffffff; /* White background */
-            transition: transform 0.2s; /* Smooth scaling effect */
-        }
+body {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  background-color: var(--background-color); /* Use defined background color */
+  font-family: 'Poppins', sans-serif; /* Modern font */
+  margin: 0;
+  padding: 20px;
+}
 
-        .event-container:hover {
-            transform: scale(1.05); /* Slightly enlarge on hover */
-        }
+.event-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 280px; /* Slightly wider for more content */
+  height: 220px; /* Adjusted height for proportions */
+  margin: 15px;
+  padding: 20px;
+  border: none; /* No border */
+  border-radius: 15px; /* More rounded corners */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Softer shadow */
+  background-color: var(--card-background); /* Clean white background */
+  transition: transform 0.3s, box-shadow 0.3s; /* Smoother scaling and shadow */
+}
 
-        h3 {
-            margin: 0 0 10px; /* Adjust heading margin */
-            font-size: 1.2em; /* Font size for heading */
-        }
+.event-container:hover {
+  transform: scale(1.05); /* Slight enlarge effect */
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15); /* Shadow intensifies on hover */
+}
 
-        .review-btn {
-            background-color: #4CAF50;
-            color: #fff;
-            padding: 8px 12px; /* Padding for button */
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px; /* Button font size */
-            margin-top: auto; /* Align at the bottom */
-            transition: background-color 0.3s; /* Smooth background transition */
-        }
+h3 {
+  margin: 0 0 15px;
+  font-size: 1.3em;
+  color: var(--primary-color); /* Use primary color for headings */
+}
 
-        .review-btn:hover {
-            background-color: #3e8e41; /* Darker green on hover */
-        }
+.review-btn {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); /* Gradient background */
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px; /* Slightly larger font */
+  margin-top: auto; /* Push to the bottom */
+  transition: background 0.3s, transform 0.2s ease; /* Smooth transitions */
+  text-transform: uppercase; /* Uppercase for bold effect */
+  letter-spacing: 1px;
+}
+
+.review-btn:hover {
+  background: linear-gradient(135deg, #5b4fd1, #6c5ce7); /* Darker gradient on hover */
+  transform: translateY(-3px); /* Lift effect on hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Slight shadow on hover */
+}
+
     </style>
 </head>
 <body>

@@ -257,7 +257,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submitAll'])) {
             <!-- Additional rows can be added here -->
         </tbody>
     </table>
-    <input type="hidden" name="event_id" value="<?php echo isset($_GET['event_id']) ? htmlspecialchars($_GET['event_id']) : ''; ?>">
+    <input type="hidden" name="event_id" value="<?php echo isset($_GET['event_id']) ? htmlspecialchars($_GET['event_id']) : ''; ?>"> <br>
     <button class="action-button add-button" onclick="addRow()">Add</button>
     <button class="action-button submit-all-button" onclick="submitAll()">Submit All</button>
 </body>

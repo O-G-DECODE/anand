@@ -307,7 +307,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_all'])) {
     </script>
 </head>
 <body>
-    <h1>Student Information</h1>
+    <h2>Student Information</h2>
     <table>
         <thead>
             <tr>
@@ -323,7 +323,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_all'])) {
             <tr id="row-1">
                 <td>
                     <form onsubmit="return validateRollNumber(this, 1);">
-                        <input type="text" name="rollNumber" class="input-field" placeholder="Enter Roll Number" oninput="updateYearHeading()">
+                        <input type="text" name="rollNumber" class="input-field" placeholder="Enter Roll Number" oninput="updateYearHeading()"> 
                         <input type="submit" class="action-button check-button" value="Check">
                     </form>
                 </td>
@@ -336,7 +336,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit_all'])) {
             <!-- Additional rows can be added here -->
         </tbody>
     </table>
-    <input type="hidden" name="event_id" value="<?php echo isset($_GET['event_id']) ? htmlspecialchars($_GET['event_id']) : ''; ?>">
+    <input type="hidden" name="event_id" value="<?php echo isset($_GET['event_id']) ? htmlspecialchars($_GET['event_id']) : ''; ?>"> <br>
     <button class="action-button add-button" onclick="addRow()">Add</button>
     <button class="action-button submit-all-button" onclick="submitAll()">Submit All</button>
 </body>
