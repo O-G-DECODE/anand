@@ -1,3 +1,17 @@
+<?php
+session_start(); // Start the session
+
+// Check if the email is set in the session
+if (isset($_SESSION['email'])) {
+    $email = $_SESSION['email'];
+
+} else {
+    echo "You are not logged in.";
+    // Optionally, redirect to the login page
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
