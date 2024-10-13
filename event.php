@@ -116,7 +116,6 @@ caption {
 </head>
 <body>
     <div class="container">
-        <h2>Your Events</h2>
         <table>
             <caption>Events Created by You</caption>
             <thead>

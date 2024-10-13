@@ -62,7 +62,7 @@
         </section>
         <section id="attendance_sheet_&_event">
             <h2>Events And Attendance Sheet  </h2>
-           <a href="review_approved_event_admin.php"><button>  View</button> </a>
+           <a href="review_event_admin.php"><button>  View</button> </a>
           <!--<a href="add_event.php"><button class="add-btn">Add</button></a>
            <a href="event_details.php"><button>  View</button> </a>-->
         </section>

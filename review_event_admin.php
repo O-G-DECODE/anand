@@ -1,106 +1,214 @@
 <?php
-// Start the session
-session_start();
-
-// Include the database connection file
 include("connection.php");
+session_start(); // Ensure the session is started to access session data
 
-// Check if 'event_id' is present in the URL
-if (isset($_GET['event_id'])) {
-    // Sanitize the input
-    $event_id = htmlspecialchars($_GET['event_id']);
-    
-    // Store the event_id in the session
-    $_SESSION['event_id'] = $event_id;
+// Check if user is logged in
+if (isset($_SESSION['email'])) {
+    $email = $_SESSION['email'];
 
-    // Prepare and execute the SQL query to fetch roll_numbers based on event_id
-    $stmt = $conn->prepare("SELECT roll_number FROM request WHERE event_id = ?");
-    $stmt->bind_param("s", $_SESSION['event_id']);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    // Fetch the staff_id of the staff member from the staff table
+    $stmt = $conn->prepare("SELECT staff_id FROM staff WHERE email = ?");
+    if ($stmt) {
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $stmt->bind_result($staff_staff_id);
+        $stmt->fetch();
+        $stmt->close();
 
-    // Check if there are roll numbers for the event
-    if ($result->num_rows > 0) {
-        // Start the HTML table with styles
-        echo "
-        <style>
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                margin: 20px 0;
-                font-size: 1em;
-                font-family: Arial, sans-serif;
-                box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-            }
-            th, td {
-                padding: 12px 15px;
-                text-align: left;
-                border-bottom: 1px solid #ddd;
-            }
-            th {
-                background-color: #4CAF50;
-                color: white;
-            }
-            tr:nth-child(even) {
-                background-color: #f2f2f2;
-            }
-            tr:hover {
-                background-color: #f1f1f1;
-            }
-        </style>
-        <table>
-            <tr><th>Roll Number</th><th>Name</th><th>Course</th><th>Department</th></tr>
-        ";
-
-        // Fetch each roll_number
-        while ($row = $result->fetch_assoc()) {
-            $roll_number = htmlspecialchars($row['roll_number']);
-
-            // Now, fetch the name, course, and department for each roll_number
-            $student_stmt = $conn->prepare("
-                SELECT s.name AS student_name, c.name AS course_name, d.name AS department_name
-                FROM student s
-                JOIN course c ON s.course_id = c.course_id
-                JOIN department d ON c.department_id = d.department_id
-                WHERE s.roll_number = ?");
-            $student_stmt->bind_param("s", $roll_number);
-            $student_stmt->execute();
-            $student_result = $student_stmt->get_result();
-
-            // Check if there's a matching student
-            if ($student_result->num_rows > 0) {
-                while ($student_row = $student_result->fetch_assoc()) {
-                    echo "<tr>
-                            <td>" . $roll_number . "</td>
-                            <td>" . htmlspecialchars($student_row['student_name']) . "</td>
-                            <td>" . htmlspecialchars($student_row['course_name']) . "</td>
-                            <td>" . htmlspecialchars($student_row['department_name']) . "</td>
-                          </tr>";
-                }
-            } else {
-                echo "<tr>
-                        <td>" . $roll_number . "</td>
-                        <td>No student found</td>
-                        <td>N/A</td>
-                        <td>N/A</td>
-                      </tr>";
-            }
-
-            // Close the student statement
-            $student_stmt->close();
+        // Fetch all events
+        $stmt = $conn->prepare("SELECT * FROM event");
+        if ($stmt) {
+            $stmt->execute();
+            $result = $stmt->get_result();
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Events</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #e4d3ea;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        echo "</table>";
-    } else {
-        echo "No roll numbers found for the event ID: " . htmlspecialchars($_SESSION['event_id']);
-    }
+        .container {
+            max-width:1100px;
+            width: 100%;
+            background: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
 
-    // Close the main statement
-    $stmt->close();
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #e0e0e0;
+        }
+
+        th {
+            background-color: #6e8efb;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9ff;
+        }
+
+        tr:hover {
+            background-color: #e6e9ff;
+        }
+
+        caption {
+            font-size: 1.5em;
+            margin: 20px 0;
+            color: #6e8efb;
+            font-weight: 700;
+        }
+
+        .btn-delete, .btn-attendance, .btn-review {
+            border: none;
+            padding: 8px 8px;
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin-left: 5px; /* Add spacing between buttons */
+        }
+
+        .btn-delete {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #d32f2f;
+            transform: translateY(-2px);
+        }
+
+        .btn-attendance {
+            background-color: #6e8efb;
+            color: white;
+        }
+
+        .btn-attendance:hover {
+            background-color: #5c7cfa;
+            transform: translateY(-2px);
+        }
+
+        .btn-review {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .btn-review:hover {
+            background-color: #388e3c;
+            transform: translateY(-2px);
+        }
+
+        /* Flexbox for Action column */
+        .action-buttons {
+            display: flex;
+            align-items: center; /* Center vertically */
+        }
+
+        .status {
+            margin-right: 10px; /* Space between status and buttons */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+       
+        <table>
+            <caption>All Events</caption>
+            <thead>
+                <tr>
+                    <th>Event Name</th>
+                    <th>Date</th>
+                    <th>Period</th>
+                    <th>Created Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+<?php
+            while ($row = $result->fetch_assoc()) {
+                $event_id = htmlspecialchars($row['event_id']);
+                $event_name = htmlspecialchars($row['name']);
+                $event_date = htmlspecialchars($row['date']);
+                $event_period = htmlspecialchars($row['period']);
+                $event_created_date = htmlspecialchars($row['create_date']);
+
+                // Check attendance status
+                $stmt2 = $conn->prepare("SELECT approve FROM request WHERE event_id = ?");
+                $stmt2->bind_param("i", $event_id);
+                $stmt2->execute();
+                $stmt2->bind_result($approve);
+                $stmt2->fetch();
+                $stmt2->close();
+
+                // Determine the status and buttons based on attendance status
+                if ($approve > 0) {
+                    $status = "Approved";
+                    $attendance_button = "<form method='get' action='view_attendance_admin.php' style='display:inline;'>
+                                            <input type='hidden' name='event_id' value='$event_id'>
+                                            <button type='submit' class='btn-review'>View  Attendance</button>
+                                          </form>";
+                } else {
+                    $status = "Pending..";
+                    $attendance_button = "<form method='get' action='mark_attendance_admin.php' style='display:inline;'>
+                                            <input type='hidden' name='event_id' value='$event_id'>
+                                            <button type='submit' class='btn-attendance'>Mark Attendance</button>
+                                          </form>";
+                }
+
+                echo "<tr>
+                        <td>$event_name</td>
+                        <td>$event_date</td>
+                        <td>$event_period</td>
+                        <td>$event_created_date</td>
+                        <td class='action-buttons'>
+                            <span class='status'>$status</span>
+                            $attendance_button
+                            <form method='post' action='delete_event.php' style='display:inline;'>
+                                <input type='hidden' name='event_id' value='$event_id'>
+                                <button type='submit' class='btn-delete'>Delete</button>
+                            </form>
+                        </td>
+                      </tr>";
+            }
+?>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+<?php
+            $stmt->close();
+        } else {
+            echo "Error preparing statement: " . $conn->error;
+        }
+    }
 } else {
-    echo "No Event ID found in the URL.";
+    echo "No user is logged in.";
 }
 
-// Close the database connection
+// Close connection
 $conn->close();
 ?>

@@ -193,38 +193,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submitAll'])) {
         }
 
         function submitAll() {
-            var rollNumbers = [];
-            var rows = document.querySelectorAll("tbody tr");
-            rows.forEach(row => {
-                var rollNumberInput = row.querySelector("input[name='rollNumber']");
-                if (rollNumberInput) {
-                    var rollNumber = rollNumberInput.value;
-                    if (rollNumber) {
-                        rollNumbers.push(rollNumber);
-                    }
-                }
-            });
-
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "", true); // Use the same PHP file
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        try {
-                            var response = JSON.parse(xhr.responseText);
-                            alert(response.message);
-                        } catch (e) {
-                            console.error("Error parsing JSON response:", e);
-                        }
-                    } else {
-                        console.error("AJAX request failed with status:", xhr.status);
-                    }
-                }
-            };
-            
-            xhr.send("rollNumbers=" + JSON.stringify(rollNumbers) + "&submitAll=true");
+    var rollNumbers = [];
+    var rows = document.querySelectorAll("tbody tr");
+    rows.forEach(row => {
+        var rollNumberInput = row.querySelector("input[name='rollNumber']");
+        if (rollNumberInput) {
+            var rollNumber = rollNumberInput.value;
+            if (rollNumber) {
+                rollNumbers.push(rollNumber);
+            }
         }
+    });
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "", true); // Use the same PHP file
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                try {
+                    var response = JSON.parse(xhr.responseText);
+                    alert(response.message);
+                    window.location.href = "staff_page.php"; // Redirect to staff_page.php
+                } catch (e) {
+                    console.error("Error parsing JSON response:", e);
+                }
+            } else {
+                console.error("AJAX request failed with status:", xhr.status);
+            }
+        }
+    };
+
+    xhr.send("rollNumbers=" + JSON.stringify(rollNumbers) + "&submitAll=true");
+}
     </script>
 </head>
 <body>
