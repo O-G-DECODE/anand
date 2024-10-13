@@ -186,7 +186,7 @@ if (isset($_SESSION['email'])) {
                         <td class='action-buttons'>
                             <span class='status'>$status</span>
                             $attendance_button
-                            <form method='post' action='delete_event.php' style='display:inline;'>
+                            <form method='post' action='delete_event_admin.php' style='display:inline;'>
                                 <input type='hidden' name='event_id' value='$event_id'>
                                 <button type='submit' class='btn-delete'>Delete</button>
                             </form>
