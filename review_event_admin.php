@@ -28,6 +28,7 @@ if (isset($_SESSION['email'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Events</title>
     <style>
+        /* Add your styles here */
         body {
             font-family: 'Poppins', sans-serif;
             background-color: #e4d3ea;
@@ -40,7 +41,7 @@ if (isset($_SESSION['email'])) {
         }
 
         .container {
-            max-width:1100px;
+            max-width: 1200px;
             width: 100%;
             background: #fff;
             padding: 40px;
@@ -80,7 +81,7 @@ if (isset($_SESSION['email'])) {
             font-weight: 700;
         }
 
-        .btn-delete, .btn-attendance, .btn-review {
+        .btn-delete, .btn-attendance, .btn-review, .btn-edit {
             border: none;
             padding: 8px 8px;
             cursor: pointer;
@@ -121,6 +122,16 @@ if (isset($_SESSION['email'])) {
             transform: translateY(-2px);
         }
 
+        .btn-edit {
+            background-color: #ff9800; /* Orange color for edit button */
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background-color: #fb8c00; /* Darker orange on hover */
+            transform: translateY(-2px);
+        }
+
         /* Flexbox for Action column */
         .action-buttons {
             display: flex;
@@ -134,7 +145,6 @@ if (isset($_SESSION['email'])) {
 </head>
 <body>
     <div class="container">
-       
         <table>
             <caption>All Events</caption>
             <thead>
@@ -155,20 +165,48 @@ if (isset($_SESSION['email'])) {
                 $event_period = htmlspecialchars($row['period']);
                 $event_created_date = htmlspecialchars($row['create_date']);
 
-                // Check attendance status
-                $stmt2 = $conn->prepare("SELECT approve FROM request WHERE event_id = ?");
-                $stmt2->bind_param("i", $event_id);
+                // Fetch the staff_id from the event table
+                $staff_id = $row['staff_id'];
+
+                // Fetch club_id from the staff table based on staff_id
+                $stmt2 = $conn->prepare("SELECT club_id FROM staff WHERE staff_id = ?");
+                $stmt2->bind_param("i", $staff_id);
                 $stmt2->execute();
-                $stmt2->bind_result($approve);
+                $stmt2->bind_result($club_id);
                 $stmt2->fetch();
                 $stmt2->close();
+
+                // Fetch club name from the club table based on club_id
+                $club_name = '';
+                if ($club_id) {
+                    $stmt3 = $conn->prepare("SELECT name FROM club WHERE club_id = ?");
+                    $stmt3->bind_param("i", $club_id);
+                    $stmt3->execute();
+                    $stmt3->bind_result($club_name);
+                    $stmt3->fetch();
+                    $stmt3->close();
+                }
+
+                // Append club name in parentheses if available
+                $display_name = $event_name;
+                if (!empty($club_name)) {
+                    $display_name .= " (" . htmlspecialchars($club_name) . ")";
+                }
+
+                // Check attendance status
+                $stmt4 = $conn->prepare("SELECT approve FROM request WHERE event_id = ?");
+                $stmt4->bind_param("i", $event_id);
+                $stmt4->execute();
+                $stmt4->bind_result($approve);
+                $stmt4->fetch();
+                $stmt4->close();
 
                 // Determine the status and buttons based on attendance status
                 if ($approve > 0) {
                     $status = "Approved";
                     $attendance_button = "<form method='get' action='view_attendance_admin.php' style='display:inline;'>
                                             <input type='hidden' name='event_id' value='$event_id'>
-                                            <button type='submit' class='btn-review'>View  Attendance</button>
+                                            <button type='submit' class='btn-review'>View Attendance</button>
                                           </form>";
                 } else {
                     $status = "Pending..";
@@ -178,14 +216,21 @@ if (isset($_SESSION['email'])) {
                                           </form>";
                 }
 
+                // Add an edit button
+                $edit_button = "<form method='get' action='edit_event.php' style='display:inline;'>
+                                    <input type='hidden' name='event_id' value='$event_id'>
+                                    <button type='submit' class='btn-edit'>Edit</button>
+                                </form>";
+
                 echo "<tr>
-                        <td>$event_name</td>
+                        <td>$display_name</td>
                         <td>$event_date</td>
                         <td>$event_period</td>
                         <td>$event_created_date</td>
                         <td class='action-buttons'>
                             <span class='status'>$status</span>
                             $attendance_button
+                            $edit_button
                             <form method='post' action='delete_event_admin.php' style='display:inline;'>
                                 <input type='hidden' name='event_id' value='$event_id'>
                                 <button type='submit' class='btn-delete'>Delete</button>

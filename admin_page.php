@@ -45,7 +45,7 @@ if (isset($_SESSION['email'])) {
         
         <section id="staff">
             <h2> Staffs</h2>
-           <a href="staff_details.php"><button>  View</button> </a>
+           <a href="staff_details.php"><button>  View and edit</button> </a>
            <a href="add_staff.php"><button class="add-btn">Add</button></a>
            <a href="remove_staff.php"><button class="remove-btn">Remove</button></a>
             <!--  more functionality as needed -->
@@ -53,7 +53,7 @@ if (isset($_SESSION['email'])) {
 
         <section id="departments">
             <h2> Departments</h2>
-           <a href="department_details.php"><button>  View</button> </a>
+           <a href="department_details.php"><button>  View and edit</button> </a>
            <a href="add_department.php"><button class="add-btn">Add</button></a>
            <a href="remove_department.php"><button class="remove-btn">Remove</button></a>
             <!--  more functionality as needed -->
@@ -61,7 +61,7 @@ if (isset($_SESSION['email'])) {
 
         <section id="courses">
             <h2> Courses</h2>
-           <a href="course_details.php"><button>  View</button> </a>
+           <a href="course_details.php"><button>  View and edit</button> </a>
            <a href="add_course.php"><button class="add-btn">Add</button></a>
            <a href="remove_course.php"><button class="remove-btn">Remove</button></a>
             <!--  more functionality as needed -->
@@ -69,13 +69,13 @@ if (isset($_SESSION['email'])) {
 
         <section id="clubs">
             <h2> Clubs</h2>
-            <a href="club_details.php "><button>  View</button></a>
+            <a href="club_details.php "><button>  View and edit</button></a>
             <a href="add_club.php"><button class="add-btn">Add</button></a>
             <a href="remove_club.php"><button class="remove-btn">Remove</button></a>
             <!--  more functionality as needed -->
         </section>
         <section id="attendance_sheet_&_event">
-            <h2>Events And Attendance Sheet  </h2>
+            <h2>Events And Attendance Sheet   </h2>
            <a href="review_event_admin.php"><button>  View</button> </a>
           <!--<a href="add_event.php"><button class="add-btn">Add</button></a>
            <a href="event_details.php"><button>  View</button> </a>-->
@@ -83,7 +83,7 @@ if (isset($_SESSION['email'])) {
 
         <section id="students">
     <h2> Students</h2> 
-    <a href="student_details.php"><button>View</button></a>
+    <a href="student_details.php"><button>View and edit</button></a>
     <!--<a href="add_student.php"><button class="add-btn">Add</button></a>
     <a href="remove_student.php"><button class="remove-btn">Remove</button></a> -->
 </section>

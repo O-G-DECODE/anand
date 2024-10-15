@@ -31,7 +31,7 @@ if (isset($_SESSION['email'])) {
     <style>
        body {
     font-family: 'Poppins', sans-serif;
-    background-color :#e4d3ea;
+    background-color: #e4d3ea;
     margin: 0;
     padding: 20px;
     min-height: 100vh;
@@ -81,7 +81,7 @@ caption {
     font-weight: 700;
 }
 
-.btn-delete, .btn-review {
+.btn-delete, .btn-review, .btn-edit {
     border: none;
     padding: 8px 15px;
     cursor: pointer;
@@ -109,6 +109,17 @@ caption {
 
 .btn-review:hover {
     background-color: #5c7cfa;
+    transform: translateY(-2px);
+}
+
+.btn-edit {
+    background-color: #ffa500;
+    color: white;
+    margin-left: 5px;
+}
+
+.btn-edit:hover {
+    background-color: #ff8c00;
     transform: translateY(-2px);
 }
 
@@ -142,6 +153,10 @@ caption {
                             <form method='get' action='review_event.php' style='display:inline;'>
                                 <input type='hidden' name='event_id' value='$event_id'>
                                 <button type='submit' class='btn-review'>Mark Attendance</button>
+                            </form>
+                            <form method='get' action='edit_event.php' style='display:inline;'>
+                                <input type='hidden' name='event_id' value='$event_id'>
+                                <button type='submit' class='btn-edit'>Edit</button>
                             </form>
                         </td>
                       </tr>";

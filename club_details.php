@@ -18,6 +18,27 @@ $result = $conn->query($sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Club Details</title>
     <link rel="stylesheet" href="style_of_ussers.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            text-align: left;
+        }
+        th {
+            background-color: #6e8efb;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f8f9ff;
+        }
+        tr:hover {
+            background-color: #e6e9ff;
+        }
+    </style>
 </head>
 <body>
 
@@ -29,12 +50,20 @@ if ($result->num_rows > 0) {
             <tr>
                 <th>Club ID</th>
                 <th>Club Name</th>
+                <th>Action</th>  <!-- New column for Action -->
             </tr>";
     
     while($row = $result->fetch_assoc()) {
+        $club_id = htmlspecialchars($row['club_id']);  // Get the club_id for the edit link
         echo "<tr>
                 <td>" . htmlspecialchars($row['club_id']) . "</td>
                 <td>" . htmlspecialchars($row['club_name']) . "</td>
+                <td>
+                    <form method='get' action='edit_club.php' style='display:inline;'>  <!-- Edit form -->
+                        <input type='hidden' name='club_id' value='$club_id'>
+                        <button type='submit' class='btn-edit'>Edit</button>
+                    </form>
+                </td>
               </tr>";
     }
     echo "</table>";
