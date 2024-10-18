@@ -157,88 +157,99 @@ if (isset($_SESSION['email'])) {
                 </tr>
             </thead>
             <tbody>
-<?php
-            while ($row = $result->fetch_assoc()) {
-                $event_id = htmlspecialchars($row['event_id']);
-                $event_name = htmlspecialchars($row['name']);
-                $event_date = htmlspecialchars($row['date']);
-                $event_period = htmlspecialchars($row['period']);
-                $event_created_date = htmlspecialchars($row['create_date']);
+            <?php
+    while ($row = $result->fetch_assoc()) {
+        $event_id = htmlspecialchars($row['event_id']);
+        $event_name = htmlspecialchars($row['name']);
+        $event_date = htmlspecialchars($row['date']);
+        $event_period = htmlspecialchars($row['period']);
+        $event_created_date = htmlspecialchars($row['create_date']);
 
-                // Fetch the staff_id from the event table
-                $staff_id = $row['staff_id'];
+        // Fetch the staff_id from the event table
+        $staff_id = $row['staff_id'];
 
-                // Fetch club_id from the staff table based on staff_id
-                $stmt2 = $conn->prepare("SELECT club_id FROM staff WHERE staff_id = ?");
-                $stmt2->bind_param("i", $staff_id);
-                $stmt2->execute();
-                $stmt2->bind_result($club_id);
-                $stmt2->fetch();
-                $stmt2->close();
+        // Fetch club_id from the staff table based on staff_id
+        $stmt2 = $conn->prepare("SELECT club_id FROM staff WHERE staff_id = ?");
+        $stmt2->bind_param("i", $staff_id);
+        $stmt2->execute();
+        $stmt2->bind_result($club_id);
+        $stmt2->fetch();
+        $stmt2->close();
 
-                // Fetch club name from the club table based on club_id
-                $club_name = '';
-                if ($club_id) {
-                    $stmt3 = $conn->prepare("SELECT name FROM club WHERE club_id = ?");
-                    $stmt3->bind_param("i", $club_id);
-                    $stmt3->execute();
-                    $stmt3->bind_result($club_name);
-                    $stmt3->fetch();
-                    $stmt3->close();
-                }
+        // Fetch club name from the club table based on club_id
+        $club_name = '';
+        if ($club_id) {
+            $stmt3 = $conn->prepare("SELECT name FROM club WHERE club_id = ?");
+            $stmt3->bind_param("i", $club_id);
+            $stmt3->execute();
+            $stmt3->bind_result($club_name);
+            $stmt3->fetch();
+            $stmt3->close();
+        }
 
-                // Append club name in parentheses if available
-                $display_name = $event_name;
-                if (!empty($club_name)) {
-                    $display_name .= " (" . htmlspecialchars($club_name) . ")";
-                }
+        // Append club name in parentheses if available
+        $display_name = $event_name;
+        if (!empty($club_name)) {
+            $display_name .= " (" . htmlspecialchars($club_name) . ")";
+        }
 
-                // Check attendance status
-                $stmt4 = $conn->prepare("SELECT approve FROM request WHERE event_id = ?");
-                $stmt4->bind_param("i", $event_id);
-                $stmt4->execute();
-                $stmt4->bind_result($approve);
-                $stmt4->fetch();
-                $stmt4->close();
+        // Check attendance status
+        $stmt4 = $conn->prepare("SELECT approve FROM request WHERE event_id = ?");
+        $stmt4->bind_param("i", $event_id);
+        $stmt4->execute();
+        $stmt4->bind_result($approve);
 
-                // Determine the status and buttons based on attendance status
-                if ($approve > 0) {
-                    $status = "Approved";
-                    $attendance_button = "<form method='get' action='view_attendance_admin.php' style='display:inline;'>
-                                            <input type='hidden' name='event_id' value='$event_id'>
-                                            <button type='submit' class='btn-review'>View Attendance</button>
-                                          </form>";
-                } else {
-                    $status = "Pending..";
-                    $attendance_button = "<form method='get' action='mark_attendance_admin.php' style='display:inline;'>
-                                            <input type='hidden' name='event_id' value='$event_id'>
-                                            <button type='submit' class='btn-attendance'>Mark Attendance</button>
-                                          </form>";
-                }
-
-                // Add an edit button
-                $edit_button = "<form method='get' action='edit_event.php' style='display:inline;'>
-                                    <input type='hidden' name='event_id' value='$event_id'>
-                                    <button type='submit' class='btn-edit'>Edit</button>
-                                </form>";
-
-                echo "<tr>
-                        <td>$display_name</td>
-                        <td>$event_date</td>
-                        <td>$event_period</td>
-                        <td>$event_created_date</td>
-                        <td class='action-buttons'>
-                            <span class='status'>$status</span>
-                            $attendance_button
-                            $edit_button
-                            <form method='post' action='delete_event_admin.php' style='display:inline;'>
-                                <input type='hidden' name='event_id' value='$event_id'>
-                                <button type='submit' class='btn-delete'>Delete</button>
-                            </form>
-                        </td>
-                      </tr>";
+        // Check if the query returned any rows
+        if ($stmt4->fetch()) {
+            // Event is found in the request table
+            if ($approve > 0) {
+                $status = "Approved";
+                $attendance_button = "<form method='get' action='view_attendance_admin.php' style='display:inline;'>
+                                        <input type='hidden' name='event_id' value='$event_id'>
+                                        <button type='submit' class='btn-review'>View Attendance</button>
+                                      </form>";
+            } else {
+                $status = "Pending..";
+                $attendance_button = "<form method='get' action='mark_attendance_admin.php' style='display:inline;'>
+                                        <input type='hidden' name='event_id' value='$event_id'>
+                                        <button type='submit' class='btn-attendance'>Mark Attendance</button>
+                                      </form>";
             }
+        } else {
+            // Event not found in the request table, set status to Pending
+            $status = "Pending..";
+            $attendance_button = "<form method='get' action='mark_attendance_admin.php' style='display:inline;'>
+                                    <input type='hidden' name='event_id' value='$event_id'>
+                                    <button type='submit' class='btn-attendance'>Mark Attendance</button>
+                                  </form>";
+        }
+
+        $stmt4->close();
+
+        // Add an edit button
+        $edit_button = "<form method='get' action='edit_event.php' style='display:inline;'>
+                            <input type='hidden' name='event_id' value='$event_id'>
+                            <button type='submit' class='btn-edit'>Edit</button>
+                        </form>";
+
+        echo "<tr>
+                <td>$display_name</td>
+                <td>$event_date</td>
+                <td>$event_period</td>
+                <td>$event_created_date</td>
+                <td class='action-buttons'>
+                    <span class='status'>$status</span>
+                    $attendance_button
+                    $edit_button
+                    <form method='post' action='delete_event_admin.php' style='display:inline;'>
+                        <input type='hidden' name='event_id' value='$event_id'>
+                        <button type='submit' class='btn-delete'>Delete</button>
+                    </form>
+                </td>
+              </tr>";
+    }
 ?>
+
             </tbody>
         </table>
     </div>

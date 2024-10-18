@@ -96,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <a href="#">View Profile</a>
         <?php endif; ?>
         <a href="event.php">Events</a>
-        <a href="#">Change Password</a>
+        <a href="reports_staff.php">Reports</a>
         <a href="review_attendance_sheet.php">Attendance Sheets</a>
     </div>
     <a href="logout.php" class="logout-button">Logout</a>
