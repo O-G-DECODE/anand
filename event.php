@@ -29,100 +29,85 @@ if (isset($_SESSION['email'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Events</title>
     <style>
-       body {
-    font-family: 'Poppins', sans-serif;
-    background-color: #e4d3ea;
-    margin: 0;
-    padding: 20px;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.container {
-    max-width: 900px;
-    width: 100%;
-    background: #fff;
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th, td {
-    padding: 12px;
-    text-align: left;
-    border: 1px solid #e0e0e0;
-}
-
-th {
-    background-color: #6e8efb;
-    color: #fff;
-    font-weight: 600;
-}
-
-tr:nth-child(even) {
-    background-color: #f8f9ff;
-}
-
-tr:hover {
-    background-color: #e6e9ff;
-}
-
-caption {
-    font-size: 1.5em;
-    margin: 20px 0;
-    color: #6e8efb;
-    font-weight: 700;
-}
-
-.btn-delete, .btn-review, .btn-edit {
-    border: none;
-    padding: 8px 15px;
-    cursor: pointer;
-    border-radius: 10px;
-    font-size: 0.9em;
-    font-weight: 600;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.btn-delete {
-    background-color: #f44336;
-    color: white;
-}
-
-.btn-delete:hover {
-    background-color: #d32f2f;
-    transform: translateY(-2px);
-}
-
-.btn-review {
-    background-color: #6e8efb;
-    color: white;
-    margin-left: 5px;
-}
-
-.btn-review:hover {
-    background-color: #5c7cfa;
-    transform: translateY(-2px);
-}
-
-.btn-edit {
-    background-color: #ffa500;
-    color: white;
-    margin-left: 5px;
-}
-
-.btn-edit:hover {
-    background-color: #ff8c00;
-    transform: translateY(-2px);
-}
-
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #e4d3ea;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #e0e0e0;
+        }
+        th {
+            background-color: #6e8efb;
+            color: #fff;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background-color: #f8f9ff;
+        }
+        tr:hover {
+            background-color: #e6e9ff;
+        }
+        caption {
+            font-size: 1.5em;
+            margin: 20px 0;
+            color: #6e8efb;
+            font-weight: 700;
+        }
+        .btn-delete, .btn-review, .btn-edit {
+            border: none;
+            padding: 8px 15px;
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .btn-delete {
+            background-color: #f44336;
+            color: white;
+        }
+        .btn-delete:hover {
+            background-color: #d32f2f;
+            transform: translateY(-2px);
+        }
+        .btn-review {
+            background-color: #6e8efb;
+            color: white;
+            margin-left: 5px;
+        }
+        .btn-review:hover {
+            background-color: #5c7cfa;
+            transform: translateY(-2px);
+        }
+        .btn-edit {
+            background-color: #ffa500;
+            color: white;
+            margin-left: 5px;
+        }
+        .btn-edit:hover {
+            background-color: #ff8c00;
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
@@ -134,6 +119,7 @@ caption {
                     <th>Event Name</th>
                     <th>Date</th>
                     <th>Period</th>
+                    <th>Status</th> <!-- Added status column -->
                     <th>Action</th>
                 </tr>
             </thead>
@@ -141,10 +127,28 @@ caption {
 <?php
             while ($row = $result->fetch_assoc()) {
                 $event_id = htmlspecialchars($row['event_id']);
+                $event_name = htmlspecialchars($row['name']);
+                $event_date = htmlspecialchars($row['date']);
+                $event_period = htmlspecialchars($row['period']);
+
+                // Check the approval status of the event from the request table
+                $stmt2 = $conn->prepare("SELECT approve FROM request WHERE event_id = ?");
+                $stmt2->bind_param("i", $event_id);
+                $stmt2->execute();
+                $stmt2->bind_result($approve);
+
+                if ($stmt2->fetch()) {
+                    $status = ($approve > 0) ? "Approved" : "Pending"; // Check if approved
+                } else {
+                    $status = "Pending"; // If not found in request table, set as pending
+                }
+                $stmt2->close();
+
                 echo "<tr>
-                        <td>" . htmlspecialchars($row['name']) . "</td>
-                        <td>" . htmlspecialchars($row['date']) . "</td>
-                        <td>" . htmlspecialchars($row['period']) . "</td>
+                        <td>$event_name</td>
+                        <td>$event_date</td>
+                        <td>$event_period</td>
+                        <td>$status</td> <!-- Display status -->
                         <td>
                             <form method='post' action='delete_event.php' style='display:inline;'>
                                 <input type='hidden' name='event_id' value='$event_id'>
