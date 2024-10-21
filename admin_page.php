@@ -34,6 +34,7 @@ if (isset($_SESSION['email'])) {
             <li><a href="#clubs">Manage Clubs</a></li>
             <li><a href="#event">Manage Events</a></li>
             <li><a href="#attendance_sheet_&_event"> Events & Attendance Sheet</a></li>
+            <li><a href="#report">Reports</a></li>
 
         </ul>
     </nav>
@@ -84,6 +85,13 @@ if (isset($_SESSION['email'])) {
         <section id="students">
     <h2> Students</h2> 
     <a href="student_details.php"><button>View and edit</button></a>
+    <!--<a href="add_student.php"><button class="add-btn">Add</button></a>
+    <a href="remove_student.php"><button class="remove-btn">Remove</button></a> -->
+</section>
+
+<section id="report">
+    <h2> Reports</h2> 
+    <a href="report_admin.php"><button>View</button></a>
     <!--<a href="add_student.php"><button class="add-btn">Add</button></a>
     <a href="remove_student.php"><button class="remove-btn">Remove</button></a> -->
 </section>
