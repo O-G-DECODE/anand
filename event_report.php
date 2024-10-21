@@ -2,51 +2,49 @@
 include("connection.php"); // Database connection
 session_start(); // Start the session
 
-// Check if the event name is passed via POST
-if (isset($_POST['event_name']) && !empty($_POST['event_name'])) {
-    $event_name = $_POST['event_name'];
+// Check if the event ID is passed via POST
+if (isset($_POST['event_id']) && !empty($_POST['event_id'])) { // Changed from event_name to event_id
+    $event_id = $_POST['event_id'];
 
-    // Fetch the event ID based on the event name
-    $stmt = $conn->prepare("SELECT event_id FROM event WHERE name = ?");
+    // Fetch the event details and the club name
+    $stmt = $conn->prepare("
+        SELECT e.name AS event_name, e.date, e.period, c.name AS club_name
+        FROM event e
+        JOIN staff s ON e.staff_id = s.staff_id
+        JOIN club c ON s.club_id = c.club_id
+        WHERE e.event_id = ?
+    ");
     if ($stmt) {
-        $stmt->bind_param("s", $event_name);
+        $stmt->bind_param("i", $event_id); // Using event_id to fetch event details
         $stmt->execute();
-        $stmt->bind_result($event_id);
+        $stmt->bind_result($event_name, $event_date, $event_period, $club_name);
         $stmt->fetch();
         $stmt->close();
-
-        // Check if event ID exists in the request table and if approved
-        $stmt = $conn->prepare("SELECT approve FROM request WHERE event_id = ?");
-        if ($stmt) {
-            $stmt->bind_param("i", $event_id);
-            $stmt->execute();
-            $stmt->bind_result($approve);
-            $stmt->fetch();
-            $stmt->close();
-
-            // If event is approved, fetch the student details
-            if ($approve > 0) {
-                // Fetch the list of students who have added attendance for the event
-                $stmt = $conn->prepare("
-                    SELECT r.roll_number, s.name as student_name, c.name as course_name
-                    FROM request r
-                    JOIN student s ON r.roll_number = s.roll_number
-                    JOIN course c ON s.course_id = c.course_id
-                    WHERE r.event_id = ?");
-                if ($stmt) {
-                    $stmt->bind_param("i", $event_id);
-                    $stmt->execute();
-                    $result = $stmt->get_result();
-                }
-            } else {
-                echo "No students have approved attendance for this event.";
-            }
-        }
     } else {
-        echo "Error fetching event information.";
+        echo "Error fetching event details.";
+        exit;
+    }
+
+    // Fetch students who have approved attendance, along with their course and department
+    $stmt = $conn->prepare("
+        SELECT r.roll_number, s.name AS student_name, c.name AS course_name, d.name AS department_name
+        FROM request r
+        JOIN student s ON r.roll_number = s.roll_number
+        JOIN course c ON s.course_id = c.course_id
+        JOIN department d ON c.department_id = d.department_id
+        WHERE r.event_id = ? AND r.approve > 0
+    ");
+    if ($stmt) {
+        $stmt->bind_param("i", $event_id); // Using event_id to fetch student details
+        $stmt->execute();
+        $result = $stmt->get_result();
+    } else {
+        echo "Error fetching student attendance details.";
+        exit;
     }
 } else {
     echo "No event selected. Please go back and select an event.";
+    exit;
 }
 ?>
 
@@ -56,102 +54,24 @@ if (isset($_POST['event_name']) && !empty($_POST['event_name'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Report</title>
-    <style>
-        :root {
-            --primary-color: #6c5ce7;
-            --secondary-color: #a29bfe;
-            --accent-color: #fd79a8;
-            --background-color: #f9f9f9;
-            --text-color: #2d3436;
-            --card-background: #ffffff;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #e4d3ea;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 40px;
-            background-color: var(--card-background);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        h3 {
-            color: var(--primary-color);
-            font-size: 1.5em;
-            margin-bottom: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
-
-        th {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .print-btn {
-            margin-top: 20px;
-            padding: 12px 24px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 1.2em;
-            border-radius: 10px;
-            text-transform: uppercase;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .print-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        @media print {
-            body {
-                font-family: Arial, sans-serif;
-            }
-            .container {
-                max-width: 210mm;
-                margin: 0 auto;
-                padding: 20px;
-                background-color: white;
-                box-shadow: none;
-            }
-            .print-btn {
-                display: none;
-            }
-        }
-    </style>
+   <link rel="stylesheet" href="report_style.css">
 </head>
 <body>
     <div class="container">
-        <h3>Event Report for "<?php echo htmlspecialchars($event_name); ?>"</h3>
+        <h3><?php echo htmlspecialchars($event_name); ?></h3>
+        <p>Date: <?php echo htmlspecialchars($event_date); ?></p>
+        <p>Period: <?php echo htmlspecialchars($event_period); ?></p>
+        <p>Club: <?php echo htmlspecialchars($club_name); ?></p>
 
         <?php if (isset($result) && $result->num_rows > 0): ?>
-            <table>
+            <h4>Students who attended:</h4>
+            <table border="1" cellpadding="10" cellspacing="0" style="width: 100%;">
                 <thead>
                     <tr>
                         <th>Roll Number</th>
                         <th>Name</th>
                         <th>Course</th>
+                        <th>Department</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -160,6 +80,7 @@ if (isset($_POST['event_name']) && !empty($_POST['event_name'])) {
                             <td><?php echo htmlspecialchars($row['roll_number']); ?></td>
                             <td><?php echo htmlspecialchars($row['student_name']); ?></td>
                             <td><?php echo htmlspecialchars($row['course_name']); ?></td>
+                            <td><?php echo htmlspecialchars($row['department_name']); ?></td>
                         </tr>
                     <?php endwhile; ?>
                 </tbody>
