@@ -88,9 +88,21 @@ if (isset($_POST['event_name']) && !empty($_POST['event_name'])) {
             margin-bottom: 20px;
         }
 
-        ul {
-            list-style-type: disc;
-            padding-left: 20px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
         }
 
         .print-btn {
@@ -134,15 +146,24 @@ if (isset($_POST['event_name']) && !empty($_POST['event_name'])) {
         <h3>Event Report for "<?php echo htmlspecialchars($event_name); ?>"</h3>
 
         <?php if (isset($result) && $result->num_rows > 0): ?>
-            <ul>
-                <?php while ($row = $result->fetch_assoc()): ?>
-                    <li>
-                        Roll Number: <?php echo htmlspecialchars($row['roll_number']); ?> - 
-                        Student Name: <?php echo htmlspecialchars($row['student_name']); ?> - 
-                        Course: <?php echo htmlspecialchars($row['course_name']); ?>
-                    </li>
-                <?php endwhile; ?>
-            </ul>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Roll Number</th>
+                        <th>Name</th>
+                        <th>Course</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while ($row = $result->fetch_assoc()): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($row['roll_number']); ?></td>
+                            <td><?php echo htmlspecialchars($row['student_name']); ?></td>
+                            <td><?php echo htmlspecialchars($row['course_name']); ?></td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
         <?php else: ?>
             <p>No students have added attendance for this event.</p>
         <?php endif; ?>
