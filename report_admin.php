@@ -146,16 +146,24 @@ if (isset($_SESSION['email'])) {
     <div class="container">
         <h2>Generate Reports</h2>
 
-        <!-- Student Report -->
-        <div class="form-group">
-            <label for="student_name">Student Report (Select Student Name)</label>
-            <input type="text" id="student_name" name="student_name" placeholder="Start typing student name...">
-            <div id="autocomplete-list"></div>
-            <form action="student_report_admin.php" method="post">
-                <input type="hidden" name="student_name_selected" id="student_name_hidden">
-                <button type="submit" onclick="document.getElementById('student_name_hidden').value = document.getElementById('student_name').value;">Generate Report</button>
-            </form>
-        </div>
+       <!-- Student Report -->
+<div class="form-group">
+    <label for="student_name">Student Report (Select Student Name)</label>
+    <input type="text" id="student_name" name="student_name" placeholder="Start typing student name...">
+    <div id="autocomplete-list"></div>
+    <form action="student_report_admin.php" method="post">
+        <input type="hidden" name="student_name_selected" id="student_name_hidden">
+        
+        <!-- Add date fields for the date range -->
+        <label for="from_date_student">From Date</label>
+        <input type="date" id="from_date_student" name="from_date_student">
+        
+        <label for="to_date_student">To Date</label>
+        <input type="date" id="to_date_student" name="to_date_student" style="margin-top: 10px;">
+        
+        <button type="submit" onclick="document.getElementById('student_name_hidden').value = document.getElementById('student_name').value;">Generate Report</button>
+    </form>
+</div>
 
         <!-- Club Report (Select Club) -->
         <div class="form-group">

@@ -27,6 +27,8 @@ if ($result->num_rows > 0) {
 // If form is submitted with a selected student name
 if (isset($_POST['student_name_selected'])) {
     $student_name = $_POST['student_name_selected'];
+    $from_date = $_POST['from_date_student'];
+    $to_date = $_POST['to_date_student'];
 
     // Fetch student details
     $sql = "SELECT s.name as student_name, s.roll_number, c.name as course_name, d.name as department_name
@@ -58,25 +60,25 @@ if (isset($_POST['student_name_selected'])) {
             <p>Course: <?php echo htmlspecialchars($student['course_name']); ?></p>
 
             <?php
-            // Fetch events participated by the student under this staff's supervision
+            // Fetch events participated by the student under this staff's supervision within the date range
             $sql = "SELECT e.name as event_name, e.date
                     FROM request r
                     JOIN event e ON r.event_id = e.event_id
-                    WHERE r.roll_number = ? AND e.staff_id = ?";
+                    WHERE r.roll_number = ? AND e.staff_id = ? AND e.date BETWEEN ? AND ?";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("ii", $student['roll_number'], $staff_id);
+            $stmt->bind_param("iiss", $student['roll_number'], $staff_id, $from_date, $to_date);
             $stmt->execute();
             $events_result = $stmt->get_result();
 
             if ($events_result->num_rows > 0) {
-                echo "<h4>Events participated:</h4>";
+                echo "<h4>Events participated between $from_date and $to_date:</h4>";
                 echo "<ul>";
                 while ($event = $events_result->fetch_assoc()) {
                     echo "<li>" . htmlspecialchars($event['event_name']) . " on " . htmlspecialchars($event['date']) . "</li>";
                 }
                 echo "</ul>";
             } else {
-                echo "<p>No events found for this student under your supervision.</p>";
+                echo "<p>No events found for this student under your supervision between $from_date and $to_date.</p>";
             }
             ?>
 

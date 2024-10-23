@@ -7,9 +7,11 @@ if (!isset($_SESSION['email'])) {
     die("You need to log in first.");
 }
 
-// If form is submitted with a selected student name
+// If form is submitted with a selected student name and date range
 if (isset($_POST['student_name_selected'])) {
     $student_name = $_POST['student_name_selected'];
+    $from_date = isset($_POST['from_date_student']) ? $_POST['from_date_student'] : null;
+    $to_date = isset($_POST['to_date_student']) ? $_POST['to_date_student'] : null;
 
     // Fetch student details
     $sql = "SELECT s.name as student_name, s.roll_number, c.name as course_name, d.name as department_name
@@ -32,7 +34,6 @@ if (isset($_POST['student_name_selected'])) {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Student Report</title>
             <link rel="stylesheet" href="report_style.css">
-           
         </head>
         <body>
         <div class="container">
@@ -48,9 +49,27 @@ if (isset($_POST['student_name_selected'])) {
                     JOIN event e ON r.event_id = e.event_id
                     JOIN staff st ON e.staff_id = st.staff_id
                     JOIN club cl ON st.club_id = cl.club_id
-                    WHERE r.roll_number = ? AND r.approve > 0"; // Fetch only approved events
+                    WHERE r.roll_number = ? AND r.approve > 0";
+
+            // Add date filters if provided
+            if (!empty($from_date) && !empty($to_date)) {
+                $sql .= " AND e.date BETWEEN ? AND ?";
+            } elseif (!empty($from_date)) {
+                $sql .= " AND e.date >= ?";
+            } elseif (!empty($to_date)) {
+                $sql .= " AND e.date <= ?";
+            }
+
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("i", $student['roll_number']);
+            if (!empty($from_date) && !empty($to_date)) {
+                $stmt->bind_param("iss", $student['roll_number'], $from_date, $to_date);
+            } elseif (!empty($from_date)) {
+                $stmt->bind_param("is", $student['roll_number'], $from_date);
+            } elseif (!empty($to_date)) {
+                $stmt->bind_param("is", $student['roll_number'], $to_date);
+            } else {
+                $stmt->bind_param("i", $student['roll_number']);
+            }
             $stmt->execute();
             $events_result = $stmt->get_result();
 
@@ -68,7 +87,7 @@ if (isset($_POST['student_name_selected'])) {
                 }
                 echo "</table>";
             } else {
-                echo "<p>No approved events found for this student.</p>";
+                echo "<p>No approved events found for this student within the selected date range.</p>";
             }
             ?>
 
