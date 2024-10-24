@@ -139,12 +139,31 @@ if ($stmt) {
             </form>
         </div>
 
-        <!-- Club Report (Uses staff's club_id from session) -->
-        <div class="form-group">
-            <form action="club_report.php" method="post">
-                <label for="from_date">Club Report<?php echo " ( $club_name )"; ?> (Select Date Range)</label>
-                <input type="date" id="from_date" name="from_date">
-                <input type="date" id="to_date" name="to_date" style="margin-top: 10px;">
+       <!-- Club Report (Select Club) -->
+       <div class="form-group">
+            <form action="club_report_admin.php" method="post">
+                <label for="club_id">Club Report (Select Club)</label>
+                <select id="club_id" name="club_id">
+                    <?php
+                    // Fetch club names from the club table
+                    $stmt = $conn->prepare("SELECT club_id, name FROM club");
+                    if ($stmt) {
+                        $stmt->execute();
+                        $result = $stmt->get_result();
+
+                        while ($row = $result->fetch_assoc()) {
+                            $club_id = $row['club_id'];
+                            $club_name = $row['name'];
+                            echo "<option value='" . htmlspecialchars($club_id) . "'>" . htmlspecialchars($club_name) . "</option>";
+                        }
+                        $stmt->close();
+                    }
+                    ?>
+                </select>
+                <label for="start_date">Start Date</label>
+                <input type="date" id="start_date" name="start_date" required>
+                <label for="end_date">End Date</label>
+                <input type="date" id="end_date" name="end_date" required>
                 <button type="submit">Generate Report</button>
             </form>
         </div>
