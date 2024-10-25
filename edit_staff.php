@@ -55,9 +55,7 @@ $clubs = $conn->query("SELECT club_id, name FROM club");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Staff</title>
-    <style>
-        /* Your styling here */
-    </style>
+    <link rel="stylesheet" href="edit_admin.css">
 </head>
 <body>
 
