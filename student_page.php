@@ -79,9 +79,11 @@ if ($club_id > 0) {
 </head>
 <body>
     <div class="header">
-        <a href="student_page_attendance.php" class="student-name">Your Attendance </a>
+        <a href="student_page_attendance.php" class="student-name"> Attendance Report</a>
+        <a href="edit_profile_student.php" class="student-name"> Edit Profile</a>
         <div class="student-name"><?php echo htmlspecialchars($student_name);
-              echo " -  $roll_number "?></div>
+              echo " -  $roll_number "?>
+              </div>
         <a href="logout.php" class="logout-button">Logout</a>
         
 
