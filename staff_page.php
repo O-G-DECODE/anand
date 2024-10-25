@@ -6,6 +6,7 @@ session_start(); // Start the session to access session data
 $staff_name = "Staff Member";
 $staff_id = null;
 $club_name = null; // Initialize club name
+$club_id = null; // Initialize club_id
 
 // Fetch the staff name, ID, and club name based on the email in the session
 if (isset($_SESSION['email'])) {
@@ -87,47 +88,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div>
         <span><?php echo $staff_name; ?></span>
         <br>
-
     </div>
+
+    <!-- Only show these options if the staff belongs to a club -->
+    <?php if ($club_id > 0): ?>
     <div class="profile-options">
-        <?php if ($club_name): ?>
-            <a href="add_volunters.php">Add <?php echo $club_name ?> Student</a>
-        <?php else: ?>
-            <a href="#">View Profile</a>
-        <?php endif; ?>
+        <a href="add_volunters.php">Add <?php echo $club_name; ?> Student</a>
         <a href="event.php">Events</a>
         <a href="reports_staff.php">Reports</a>
-        <a href="review_attendance_sheet.php">Attendance Sheets</a>
     </div>
+    <?php endif; ?>
+    <div class="profile-options"><a href="review_attendance_sheet.php">Attendance Sheets</a></div>
+    <div class="profile-options"><a href="edit_staff_profile.php">Edit Profile</a></div>
+
     <a href="logout.php" class="logout-button">Logout</a>
 </div>
 
-
-    <div class="container">
-        <h2>Create New Event</h2>
-        <form method="post" action="">
-            <div class="form-group">
-                <label for="event-name">Event Name:</label>
-                <input type="text" id="event_name" name="event_name" required>
-            </div>
-            <div class="form-group">
-                <label for="event-date">Date:</label>
-                <input type="date" id="event_date" name="event_date" required>
-            </div>
-            <div class="form-group">
-                <label for="event-period">Period:</label>
-                <select id="event_period" name="event_period[]" multiple required>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <button type="submit" name="submit">Create Event</button>
-            </div>
-        </form>
-    </div>
+<div class="container">
+    <h2>Create New Event</h2>
+    <form method="post" action="">
+        <div class="form-group">
+            <label for="event-name">Event Name:</label>
+            <input type="text" id="event_name" name="event_name" required>
+        </div>
+        <div class="form-group">
+            <label for="event-date">Date:</label>
+            <input type="date" id="event_date" name="event_date" required>
+        </div>
+        <div class="form-group">
+            <label for="event-period">Period:</label>
+            <select id="event_period" name="event_period[]" multiple required>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <button type="submit" name="submit">Create Event</button>
+        </div>
+    </form>
+</div>
 </body>
 </html>
