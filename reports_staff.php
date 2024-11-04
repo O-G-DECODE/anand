@@ -148,6 +148,36 @@ if ($stmt) {
                 <button type="submit">Generate Report</button>
             </form>
         </div>
+       <!-- Department Report -->
+<div class="form-group">
+    <form action="department_report.php" method="post">
+        <!-- Department dropdown -->
+        <label for="department_name">Department</label>
+        <select id="department_name" name="department_name" required>
+            <option value="">Select Department</option>
+            <!-- PHP code to populate department options -->
+            <?php
+            // Assuming you have a database connection in $conn
+            $query = "SELECT department_id, name FROM department";
+            $result = $conn->query($query);
+            
+            while ($row = $result->fetch_assoc()) {
+                echo "<option value='" . $row['department_id'] . "'>" . $row['name'] . "</option>";
+            }
+            ?>
+        </select>
+
+        <!-- Date range fields -->
+        <label for="from_date">From Date</label>
+        <input type="date" id="from_date" name="from_date" required>
+        
+        <label for="to_date">To Date</label>
+        <input type="date" id="to_date" name="to_date" style="margin-top: 10px;" required>
+        
+        <!-- Submit button -->
+        <button type="submit">Generate Report</button>
+    </form>
+</div>
 
         <!-- Event Report -->
         <div class="form-group">
