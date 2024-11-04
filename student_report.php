@@ -50,7 +50,7 @@ if (isset($_POST['student_name_selected'])) {
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Student Report</title>
-           <link rel="stylesheet" href="report_style.css">
+            <link rel="stylesheet" href="report_style.css">
         </head>
         <body>
         <div class="container">
@@ -61,7 +61,7 @@ if (isset($_POST['student_name_selected'])) {
 
             <?php
             // Fetch events participated by the student under this staff's supervision within the date range
-            $sql = "SELECT e.name as event_name, e.date
+            $sql = "SELECT e.name as event_name, e.date, e.period
                     FROM request r
                     JOIN event e ON r.event_id = e.event_id
                     WHERE r.roll_number = ? AND e.staff_id = ? AND e.date BETWEEN ? AND ?";
@@ -72,11 +72,16 @@ if (isset($_POST['student_name_selected'])) {
 
             if ($events_result->num_rows > 0) {
                 echo "<h4>Events participated between $from_date and $to_date:</h4>";
-                echo "<ul>";
+                echo "<table>";
+                echo "<tr><th>Event Name</th><th>Period</th><th>Date</th></tr>";
                 while ($event = $events_result->fetch_assoc()) {
-                    echo "<li>" . htmlspecialchars($event['event_name']) . " on " . htmlspecialchars($event['date']) . "</li>";
+                    echo "<tr>";
+                    echo "<td>" . htmlspecialchars($event['event_name']) . "</td>";
+                    echo "<td>" . htmlspecialchars($event['period']) . "</td>";
+                    echo "<td>" . htmlspecialchars($event['date']) . "</td>";
+                    echo "</tr>";
                 }
-                echo "</ul>";
+                echo "</table>";
             } else {
                 echo "<p>No events found for this student under your supervision between $from_date and $to_date.</p>";
             }
