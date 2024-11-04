@@ -94,13 +94,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php if ($club_id > 0): ?>
     <div class="profile-options">
         <a href="add_volunters.php">Add <?php echo $club_name; ?> Student</a>
+        <a href="remove_volunters.php"> Remove <?php echo $club_name; ?> Student</a>
         <a href="event.php">Events</a>
         <a href="reports_staff.php">Reports</a>
     </div>
     <?php endif; ?>
     <div class="profile-options"><a href="review_attendance_sheet.php">Attendance Sheets</a></div>
     <div class="profile-options"><a href="edit_staff_profile.php">Edit Profile</a></div>
-
+    <div class="profile-options"><a href="report_attendance_marker.php">Department Report</a></div>
     <a href="logout.php" class="logout-button">Logout</a>
 </div>
 
