@@ -58,6 +58,7 @@ if (isset($_POST['event_id']) && !empty($_POST['event_id'])) { // Changed from e
 </head>
 <body>
     <div class="container">
+        <h2>MES COLLEGE MARAMPALLY </h2>
         <h3><?php echo htmlspecialchars($event_name); ?></h3>
         <p>Date: <?php echo htmlspecialchars($event_date); ?></p>
         <p>Period: <?php echo htmlspecialchars($event_period); ?></p>
