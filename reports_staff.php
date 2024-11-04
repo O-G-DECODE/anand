@@ -125,7 +125,7 @@ if ($stmt) {
             <label for="student_name">Student Report (Select Student Name)</label>
             <input type="text" id="student_name" name="student_name" placeholder="Start typing student name...">
             <div id="autocomplete-list"></div>
-            <form action="student_report_admin.php" method="post">
+            <form action="student_report.php" method="post">
                 <input type="hidden" name="student_name_selected" id="student_name_hidden">
                 
                 <!-- Add date fields for the date range -->
