@@ -62,9 +62,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->execute();
             $result = $stmt->get_result();
 
-            // Check if any events found
+            // Check if any events found 
             if ($result->num_rows > 0) {
                 echo "<div class='container'>";
+                echo "<h2>MES COLLEGE MARAMPALLY </h2>";
                 echo "<h3>Club Report for $club_name</h3>";
                 echo "<h4>From: $from_date To: $to_date</h4>";
                 echo "<table border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
