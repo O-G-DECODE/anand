@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['rollNumber'])) {
     error_log("Received roll number: " . $rollNumber); // Debugging line
 
     // Prepare and execute the query to fetch student details
-    $sql = "SELECT s.name as student_name, c.name as course_name, d.name as department_name
+    $sql = "SELECT s.name as student_name, c.name as course_name, d.name as department_name, s.club_id
             FROM student s
             JOIN course c ON s.course_id = c.course_id
             JOIN department d ON c.department_id = d.department_id
@@ -37,12 +37,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['rollNumber'])) {
 
     // Check if any record was found
     if ($row = $result->fetch_assoc()) {
-        echo json_encode(array(
-            'status' => 'registered',
-            'student_name' => $row['student_name'],
-            'course_name' => $row['course_name'],
-            'department_name' => $row['department_name']
-        ));
+        if ($row['club_id'] > 0) {
+            // Check if the student is already added to a club
+            echo json_encode(array('status' => 'error', 'message' => 'Student already added to a club.'));
+        } else {
+            echo json_encode(array(
+                'status' => 'registered',
+                'student_name' => $row['student_name'],
+                'course_name' => $row['course_name'],
+                'department_name' => $row['department_name']
+            ));
+        }
     } else {
         echo json_encode(array('status' => 'not_registered'));
     }
@@ -101,7 +106,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submitAll'])) {
     echo json_encode(array('status' => 'success', 'message' => 'Club ID inserted successfully.'));
     exit();
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -135,6 +139,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submitAll'])) {
                                 row.querySelector(".student-name").textContent = response.student_name;
                                 row.querySelector(".course-name").textContent = response.course_name;
                                 row.querySelector(".department-name").textContent = response.department_name;
+                            } else if (response.status === "error") {
+                                alert(response.message); // Show error message if student is already added to a club
                             }
                         } catch (e) {
                             console.error("Error parsing JSON response:", e);
@@ -193,39 +199,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submitAll'])) {
         }
 
         function submitAll() {
-    var rollNumbers = [];
-    var rows = document.querySelectorAll("tbody tr");
-    rows.forEach(row => {
-        var rollNumberInput = row.querySelector("input[name='rollNumber']");
-        if (rollNumberInput) {
-            var rollNumber = rollNumberInput.value;
-            if (rollNumber) {
-                rollNumbers.push(rollNumber);
-            }
-        }
-    });
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "", true); // Use the same PHP file
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                try {
-                    var response = JSON.parse(xhr.responseText);
-                    alert(response.message);
-                    window.location.href = "staff_page.php"; // Redirect to staff_page.php
-                } catch (e) {
-                    console.error("Error parsing JSON response:", e);
+            var rollNumbers = [];
+            var rows = document.querySelectorAll("tbody tr");
+            rows.forEach(row => {
+                var rollNumberInput = row.querySelector("input[name='rollNumber']");
+                if (rollNumberInput) {
+                    var rollNumber = rollNumberInput.value;
+                    if (rollNumber) {
+                        rollNumbers.push(rollNumber);
+                    }
                 }
-            } else {
-                console.error("AJAX request failed with status:", xhr.status);
-            }
-        }
-    };
+            });
 
-    xhr.send("rollNumbers=" + JSON.stringify(rollNumbers) + "&submitAll=true");
-}
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "", true); // Use the same PHP file
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        try {
+                            var response = JSON.parse(xhr.responseText);
+                            alert(response.message);
+                            window.location.href = "staff_page.php"; // Redirect to staff_page.php
+                        } catch (e) {
+                            console.error("Error parsing JSON response:", e);
+                        }
+                    } else {
+                        console.error("AJAX request failed with status:", xhr.status);
+                    }
+                }
+            };
+
+            xhr.send("rollNumbers=" + JSON.stringify(rollNumbers) + "&submitAll=true");
+        }
     </script>
 </head>
 <body>
