@@ -31,7 +31,7 @@ if (isset($_SESSION['email'])) {
             <li><a href="#staff">Manage Staff</a></li>
             <li><a href="#departments">Manage Departments</a></li>
             <li><a href="#courses">Manage Courses</a></li>
-            <li><a href="#clubs">Manage Clubs</a></li>
+            <li><a href="#clubs ">Manage Clubs and Coordinators</a></li>
             <li><a href="#event">Manage Events</a></li>
             <li><a href="#attendance_sheet_&_event"> Events & Attendance Sheet</a></li>
             <li><a href="#report">Reports</a></li>
@@ -71,6 +71,7 @@ if (isset($_SESSION['email'])) {
         <section id="clubs">
             <h2> Clubs</h2>
             <a href="club_details.php "><button>  View and edit</button></a>
+            <a href="volunteer_admin_page.php"><button> Manage Coodinators</button></a>
             <a href="add_club.php"><button class="add-btn">Add</button></a>
             <a href="remove_club.php"><button class="remove-btn">Remove</button></a>
             <!--  more functionality as needed -->
@@ -84,7 +85,7 @@ if (isset($_SESSION['email'])) {
 
         <section id="students">
     <h2> Students</h2> 
-    <a href="student_details.php"><button>View and edit</button></a>
+    <a href="student_details.php"><button>View</button></a>
     <!--<a href="add_student.php"><button class="add-btn">Add</button></a>
     <a href="remove_student.php"><button class="remove-btn">Remove</button></a> -->
 </section>
