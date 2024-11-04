@@ -54,7 +54,8 @@ if (isset($_POST['student_name_selected'])) {
         </head>
         <body>
         <div class="container">
-            <h3>Student Report for: <?php echo htmlspecialchars($student['student_name']); ?></h3>
+            <h2> MES COLLEGE MARAMPALLY </h2>
+            <h3> <?php echo htmlspecialchars($student['student_name']); ?></h3>
             <p>Roll Number: <?php echo htmlspecialchars($student['roll_number']); ?></p>
             <p>Department: <?php echo htmlspecialchars($student['department_name']); ?></p>
             <p>Course: <?php echo htmlspecialchars($student['course_name']); ?></p>
