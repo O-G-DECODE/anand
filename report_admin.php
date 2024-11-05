@@ -167,11 +167,46 @@ if ($stmt) {
                 <button type="submit">Generate Report</button>
             </form>
         </div>
-         <!-- Department Report -->
+
+        <!-- Unapproved Event Report -->
 <div class="form-group">
+    <label for="event_name">Unapproved Events</label>
+
+    <!-- Form for Unapproved Event Report with Date Range -->
+    <div class="form-group">
+        <form action="unapproved_event.php" method="post">
+            <!-- Date range fields -->
+            <label for="from_date">From Date</label>
+            <input type="date" id="from_date" name="from_date">
+            
+            <label for="to_date">To Date</label>
+            <input type="date" id="to_date" name="to_date" style="margin-top: 10px;">
+            
+            <button type="submit">Generate Report</button>
+        </form>
+    </div>
+</div>
+ <!-- approved event report -->
+<div class="form-group">
+<label for="event_name">Approved Events</label>
+
+    <!-- Form for selecting a date range for approved events -->
+    <form action="approved_event.php" method="post">
+        <label for="from_date">From Date</label>
+        <input type="date" id="from_date" name="from_date">
+        
+        <label for="to_date">To Date</label>
+        <input type="date" id="to_date" name="to_date" style="margin-top: 10px;">
+        
+        <button type="submit">Generate Report</button>
+    </form>
+</div>
+ 
+ <!-- Department Report -->
+ <div class="form-group">
     <form action="department_report.php" method="post">
         <!-- Department dropdown -->
-        <label for="department_name">Department</label>
+        <label for="department_name">Department wise report</label>
         <select id="department_name" name="department_name" required>
             <option value="">Select Department</option>
             <!-- PHP code to populate department options -->
@@ -185,8 +220,9 @@ if ($stmt) {
             }
             ?>
         </select>
-
-        <!-- Date range fields -->
+    
+    
+         <!-- Date range fields -->
         <label for="from_date">From Date</label>
         <input type="date" id="from_date" name="from_date" required>
         
@@ -197,7 +233,6 @@ if ($stmt) {
         <button type="submit">Generate Report</button>
     </form>
 </div>
-
 
         <!-- Event Report -->
 <div class="form-group">
