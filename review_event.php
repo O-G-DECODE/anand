@@ -164,7 +164,7 @@ if (isset($_SESSION['email'])) {
                             <td>$student_name</td>
                             <td>$course_name</td>
                             <td>
-                                <form method='post' action='remove_student.php' style='display:inline;'>
+                                <form method='post' action='reject_student.php' style='display:inline;'>
                                     <input type='hidden' name='event_id' value='$event_id'>
                                     <input type='hidden' name='roll_number' value='$roll_number'>
                                     <button type='submit' class='btn-remove'>Remove</button>
