@@ -201,7 +201,20 @@ if ($stmt) {
         <button type="submit">Generate Report</button>
     </form>
 </div>
- 
+ <!-- rejected students -->
+
+  <label for="event_name">Report of Rejected students</label>
+  <div class="form-group">
+    <form action="rejected_student_report.php" method="post">
+        <label for="from_date">From Date</label>
+        <input type="date" id="from_date" name="from_date" required>
+        
+        <label for="to_date">To Date</label>
+        <input type="date" id="to_date" name="to_date" style="margin-top: 10px;" required>
+        
+        <button type="submit">Generate Report</button>
+    </form>
+</div>
  <!-- Department Report -->
  <div class="form-group">
     <form action="department_report.php" method="post">
