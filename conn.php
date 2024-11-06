@@ -151,6 +151,17 @@ if (mysqli_num_rows($table_exists) == 0) {
         die("Error creating table 'admin': " . mysqli_error($conn));
     }
 }
-
+// Check if the 'reject' table exists
+$table_exists = mysqli_query($conn, "SHOW TABLES LIKE 'reject'");
+if (mysqli_num_rows($table_exists) == 0) {
+    $sql = "CREATE TABLE reject (
+        roll_number BIGINT(20) NOT NULL,
+        event_id INT(10) NOT NULL,
+        PRIMARY KEY (roll_number, event_id)
+    )";
+    if (!mysqli_query($conn, $sql)) {
+        die("Error creating table 'reject': " . mysqli_error($conn));
+    }
+}
 // Continue with your database operations
 ?>
