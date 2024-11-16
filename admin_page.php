@@ -38,12 +38,7 @@ if (isset($_SESSION['email'])) {
 
         </ul>
     </nav>
-    <main>
-   
-   
-
-<!-- Repeat the same for other sections -->
-        
+    <main>        
         <section id="staff">
             <h2> Staffs</h2>
            <a href="staff_details.php"><button>  View and edit</button> </a>
@@ -65,36 +60,32 @@ if (isset($_SESSION['email'])) {
            <a href="course_details.php"><button>  View and edit</button> </a>
            <a href="add_course.php"><button class="add-btn">Add</button></a>
            <a href="remove_course.php"><button class="remove-btn">Remove</button></a>
-            <!--  more functionality as needed -->
         </section>
-
         <section id="clubs">
             <h2> Clubs</h2>
             <a href="club_details.php "><button>  View and edit</button></a>
             <a href="volunteer_admin_page.php"><button> Manage Coodinators</button></a>
             <a href="add_club.php"><button class="add-btn">Add</button></a>
             <a href="remove_club.php"><button class="remove-btn">Remove</button></a>
-            <!--  more functionality as needed -->
         </section>
         <section id="attendance_sheet_&_event">
             <h2>Events And Attendance Sheet   </h2>
            <a href="review_event_admin.php"><button>  View</button> </a>
-          <!--<a href="add_event.php"><button class="add-btn">Add</button></a>
-           <a href="event_details.php"><button>  View</button> </a>-->
         </section>
-
         <section id="students">
     <h2> Students</h2> 
     <a href="student_details.php"><button>View</button></a>
-    <!--<a href="add_student.php"><button class="add-btn">Add</button></a>
-    <a href="remove_student.php"><button class="remove-btn">Remove</button></a> -->
 </section>
-
 <section id="report">
     <h2> Reports</h2> 
-    <a href="report_admin.php"><button>View</button></a>
-    <!--<a href="add_student.php"><button class="add-btn">Add</button></a>
-    <a href="remove_student.php"><button class="remove-btn">Remove</button></a> -->
+    <a href="report_admin.php?section=student_report"><button>Student Wise Report</button></a>
+<a href="report_admin.php?section=rejected_students"><button>Rejected Student Report</button></a>
+<a href="report_admin.php?section=department_report"><button>Department Wise Report</button></a>
+<a href="report_admin.php?section=club_report"><button>Club Report</button></a>
+<a href="report_admin.php?section=event_report"><button>Event Report</button></a>
+<a href="report_admin.php?section=approved_event"><button>Approved Event Report</button></a>
+<a href="report_admin.php?section=unapproved_event"><button>Un-Approved Event Report</button></a>
+
 </section>
     </main>
     <footer>
