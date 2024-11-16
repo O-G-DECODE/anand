@@ -1,157 +1,171 @@
 :root {
-    --primary-color: #6C5CE7; /* Vibrant purple */
-    --secondary-color: #7F9CF5; /* Light purple */
-    --accent-color: #ED64A6; /* Vibrant pink */
-    --background-color: #e0f7fa; /* Light blue background */
-    --header-footer-color: #00796b; /* Teal for header and footer */
-    --button-green: #4caf50; /* Green button */
-    --button-green-hover: #388e3c; /* Darker green on hover */
-    --button-blue: #6c5ce7; /* Vibrant blue-purple */
-    --button-blue-hover: #5b4fd1; /* Darker blue on hover */
-    --button-red: #e74c3c; /* Vibrant red */
-    --button-red-hover: #c0392b; /* Darker red on hover */
-    --moonlight-color: rgba(108, 92, 231, 0.2); /* Soft moonlight effect */
-  }
-  
-  body {
-    font-family: 'Poppins', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: var(--background-color); /* Light blue background */
-  }
-  
-  header {
-    background: var(--header-footer-color); /* Dark teal header */
-    color: #ffffff;
-    padding: 15px 0;
-    text-align: center;
-    font-size: 1.5em;
-  }
-  
-  nav {
-    background: #009688; /* Teal navigation bar */
-    color: #ffffff;
-    text-align: center;
-    padding: 15px 0;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for nav */
-  }
-  
-  nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  nav ul li {
-    display: inline;
-    margin-right: 30px; /* Spacing between items */
-  }
-  
-  nav ul li a {
-    color: white;
-    text-decoration: none;
-    font-size: 1.2em; /* Slightly larger font */
-  }
-  
-  nav ul li a:hover {
-    text-decoration: underline;
-  }
-  
-  main {
-    padding: 40px; /* More padding for spacious feel */
-  }
-  
-  /* Section with moonlight background and subtle animation */
-  section {
-    margin-bottom: 30px;
+  --primary-color: #6C5CE7; /* Vibrant purple */
+  --secondary-color: #7F9CF5; /* Light purple */
+  --accent-color: #ED64A6; /* Vibrant pink */
+  --background-color: #e0f7fa; /* Light blue background */
+  --header-footer-color: #00796b; /* Teal for header and footer */
+  --button-green: #4caf50; /* Green button */
+  --button-green-hover: #388e3c; /* Darker green on hover */
+  --button-blue: #6c5ce7; /* Vibrant blue-purple */
+  --button-blue-hover: #5b4fd1; /* Darker blue on hover */
+  --button-red: #e74c3c; /* Vibrant red */
+  --button-red-hover: #c0392b; /* Darker red on hover */
+  --moonlight-color: rgba(108, 92, 231, 0.2); /* Soft moonlight effect */
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--background-color); /* Light blue background */
+}
+
+header {
+  background: var(--header-footer-color); /* Dark teal header */
+  color: #ffffff;
+  padding: 15px 0;
+  text-align: center;
+  font-size: 1.5em;
+}
+
+nav {
+  background: #009688; /* Teal navigation bar */
+  color: #ffffff;
+  text-align: center;
+  padding: 15px 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for nav */
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+nav ul li {
+  display: inline;
+  margin-right: 30px; /* Spacing between items */
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.2em; /* Slightly larger font */
+}
+
+nav ul li a:hover {
+  text-decoration: underline;
+}
+
+main {
+  padding: 40px; /* More padding for spacious feel */
+}
+
+/* Section with moonlight background and subtle animation */
+section {
+  margin-bottom: 30px;
+  background: radial-gradient(circle at top left, var(--moonlight-color) 0%, transparent 70%);
+  padding: 20px;
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Softer shadow */
+  position: relative;
+  animation: moonlight-glow 10s ease-in-out infinite;
+}
+
+/* Animation for moonlight glow */
+@keyframes moonlight-glow {
+  0% {
     background: radial-gradient(circle at top left, var(--moonlight-color) 0%, transparent 70%);
-    padding: 20px;
-    border-radius: 10px; /* Rounded corners */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Softer shadow */
-    position: relative;
-    animation: moonlight-glow 10s ease-in-out infinite;
   }
-  
-  /* Animation for moonlight glow */
-  @keyframes moonlight-glow {
-    0% {
-      background: radial-gradient(circle at top left, var(--moonlight-color) 0%, transparent 70%);
-    }
-    50% {
-      background: radial-gradient(circle at bottom right, var(--moonlight-color) 0%, transparent 70%);
-    }
-    100% {
-      background: radial-gradient(circle at top left, var(--moonlight-color) 0%, transparent 70%);
-    }
+  50% {
+    background: radial-gradient(circle at bottom right, var(--moonlight-color) 0%, transparent 70%);
   }
-  
-  button {
-    padding: 12px 18px;
-    background: var(--button-green);
-    color: white;
-    border: none;
-    border-radius: 8px; /* Rounded corners for buttons */
-    cursor: pointer;
-    font-size: 16px;
-    transition: background 0.3s, transform 0.2s ease; /* Smooth transitions */
+  100% {
+    background: radial-gradient(circle at top left, var(--moonlight-color) 0%, transparent 70%);
   }
-  
-  button:hover {
-    background: var(--button-green-hover);
-    transform: translateY(-2px); /* Lift effect on hover */
-  }
-  
-  footer {
-    text-align: center;
-    padding: 15px 0;
-    background: var(--header-footer-color); /* Dark teal footer */
-    color: #ffffff;
-    position: relative;
-    bottom: 0;
-    width: 100%;
-    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1); /* Shadow for footer */
-  }
-  
-  /* Style for Add button */
-  .add-btn {
-    background-color: var(--button-blue); /* Purple-blue button */
-    color: #ffffff;
-    border: none;
-    padding: 12px 24px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: background 0.2s, transform 0.2s ease;
-  }
-  
-  .add-btn:hover {
-    background-color: var(--button-blue-hover); /* Darker blue on hover */
-    transform: translateY(-2px);
-  }
-  
-  /* Style for Remove button */
-  .remove-btn {
-    background-color: var(--button-red); /* Red button */
-    color: #ffffff;
-    border: none;
-    padding: 12px 24px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: background 0.1s, transform 0.2s ease;
-  }
-  
-  .remove-btn:hover {
-    background-color: var(--button-red-hover); /* Darker red on hover */
-    transform: translateY(-2px);
-  }
-  .edit-btn {
-    background-color:rgb(209, 216, 83); /* Red button */
-    color: #ffffff;
-    border: none;
-    padding: 12px 24px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: background 0.1s, transform 0.2s ease;
-  }
+}
+
+button {
+  padding: 12px 18px;
+  background: var(--button-green);
+  color: white;
+  border: none;
+  border-radius: 8px; /* Rounded corners for buttons */
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s, transform 0.2s ease; /* Smooth transitions */
+}
+
+button:hover {
+  background: var(--button-green-hover);
+  transform: translateY(-2px); /* Lift effect on hover */
+}
+
+footer {
+  text-align: center;
+  padding: 15px 0;
+  background: var(--header-footer-color); /* Dark teal footer */
+  color: #ffffff;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1); /* Shadow for footer */
+}
+
+/* Style for Add button */
+.add-btn {
+  background-color: var(--button-blue); /* Purple-blue button */
+  color: #ffffff;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.2s, transform 0.2s ease;
+}
+
+.add-btn:hover {
+  background-color: var(--button-blue-hover); /* Darker blue on hover */
+  transform: translateY(-2px);
+}
+
+/* Style for Remove button */
+.remove-btn {
+  background-color: var(--button-red); /* Red button */
+  color: #ffffff;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.1s, transform 0.2s ease;
+}
+
+.remove-btn:hover {
+  background-color: var(--button-red-hover); /* Darker red on hover */
+  transform: translateY(-2px);
+}
+.edit-btn {
+  background-color:rgb(209, 216, 83); /* Red button */
+  color: #ffffff;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.1s, transform 0.2s ease;
+}
+/* Add this to your sty.css or within a <style> block */
+.toggle-btn {
+    background-color: #05ac6c;  /* Green background */
+    color: white;               /* White text */
+    padding: 10px 20px;         /* Padding around the text */
+    border: none;               /* Remove default border */
+    border-radius: 5px;         /* Rounded corners */
+    cursor: pointer;           /* Pointer cursor on hover */
+    font-size: 16px;            /* Font size */
+}
+
+.toggle-btn:hover {
+    background-color: #0d7272;  /* Darker green on hover */
+}
