@@ -70,7 +70,7 @@ if ($stmt) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reports Page</title>
-   <link rel="stylesheet" href="report_page_style.css">
+    <link rel="stylesheet" href="report_page_style.css">
 
     <script>
         // Autocomplete function for student report
@@ -120,135 +120,114 @@ if ($stmt) {
     <div class="container">
         <h2>Generate Reports</h2>
 
-        <!-- Student Report -->
-        <div class="form-group">
-            <label for="student_name">Student Report (Select Student Name)</label>
-            <input type="text" id="student_name" name="student_name" placeholder="Start typing student name...">
-            <div id="autocomplete-list"></div>
-            <form action="student_report_admin.php" method="post">
-                <input type="hidden" name="student_name_selected" id="student_name_hidden">
-                
-                <!-- Add date fields for the date range -->
-                <label for="from_date_student">From Date</label>
-                <input type="date" id="from_date_student" name="from_date_student">
-                
-                <label for="to_date_student">To Date</label>
-                <input type="date" id="to_date_student" name="to_date_student" style="margin-top: 10px;">
-                
-                <button type="submit" onclick="document.getElementById('student_name_hidden').value = document.getElementById('student_name').value;">Generate Report</button>
-            </form>
-        </div>
+        <?php
+        // Get the section from the URL
+        if (isset($_GET['section'])) {
+            $section = $_GET['section'];
 
-       <!-- Club Report (Select Club) -->
-       <div class="form-group">
-            <form action="club_report_admin.php" method="post">
-                <label for="club_id">Club Report (Select Club)</label>
-                <select id="club_id" name="club_id">
-                    <?php
-                    // Fetch club names from the club table
-                    $stmt = $conn->prepare("SELECT club_id, name FROM club");
-                    if ($stmt) {
-                        $stmt->execute();
-                        $result = $stmt->get_result();
-
-                        while ($row = $result->fetch_assoc()) {
-                            $club_id = $row['club_id'];
-                            $club_name = $row['name'];
-                            echo "<option value='" . htmlspecialchars($club_id) . "'>" . htmlspecialchars($club_name) . "</option>";
-                        }
-                        $stmt->close();
-                    }
+            switch ($section) {
+                case 'student_report':
                     ?>
-                </select>
-                <label for="start_date">Start Date</label>
-                <input type="date" id="start_date" name="start_date" required>
-                <label for="end_date">End Date</label>
-                <input type="date" id="end_date" name="end_date" required>
-                <button type="submit">Generate Report</button>
-            </form>
-        </div>
+                    <div class="form-group">
+                        <label for="student_name">Student Report (Select Student Name)</label>
+                        <input type="text" id="student_name" name="student_name" placeholder="Start typing student name...">
+                        <div id="autocomplete-list"></div>
+                        <form action="student_report_admin.php" method="post">
+                            <input type="hidden" name="student_name_selected" id="student_name_hidden">
 
-        <!-- Unapproved Event Report -->
-<div class="form-group">
-    <label for="event_name">Unapproved Events</label>
+                            <!-- Add date fields for the date range -->
+                            <label for="from_date_student">From Date</label>
+                            <input type="date" id="from_date_student" name="from_date_student">
 
-    <!-- Form for Unapproved Event Report with Date Range -->
-    <div class="form-group">
-        <form action="unapproved_event.php" method="post">
-            <!-- Date range fields -->
-            <label for="from_date">From Date</label>
-            <input type="date" id="from_date" name="from_date">
-            
-            <label for="to_date">To Date</label>
-            <input type="date" id="to_date" name="to_date" style="margin-top: 10px;">
-            
-            <button type="submit">Generate Report</button>
-        </form>
-    </div>
-</div>
- <!-- approved event report -->
-<div class="form-group">
-<label for="event_name">Approved Events</label>
+                            <label for="to_date_student">To Date</label>
+                            <input type="date" id="to_date_student" name="to_date_student" style="margin-top: 10px;">
 
-    <!-- Form for selecting a date range for approved events -->
-    <form action="approved_event.php" method="post">
-        <label for="from_date">From Date</label>
-        <input type="date" id="from_date" name="from_date">
-        
-        <label for="to_date">To Date</label>
-        <input type="date" id="to_date" name="to_date" style="margin-top: 10px;">
-        
-        <button type="submit">Generate Report</button>
-    </form>
-</div>
- <!-- rejected students -->
+                            <button type="submit" onclick="document.getElementById('student_name_hidden').value = document.getElementById('student_name').value;">Generate Report</button>
+                        </form>
+                    </div>
+                    <?php
+                    break;
+                case 'rejected_students':
+                    ?>
+                    <div class="form-group">
+                        <label for="from_date">Report of Rejected Students</label>
+                        <form action="rejected_student_report.php" method="post">
+                            <label for="from_date">From Date</label>
+                            <input type="date" id="from_date" name="from_date" required>
+                            
+                            <label for="to_date">To Date</label>
+                            <input type="date" id="to_date" name="to_date" style="margin-top: 10px;" required>
+                            
+                            <button type="submit">Generate Report</button>
+                        </form>
+                    </div>
+                    <?php
+                    break;
+                case 'department_report':
+                    ?>
+                    <div class="form-group">
+                        <label for="department_name">Department wise report</label>
+                        <form action="department_report.php" method="post">
+                            <select id="department_name" name="department_name" required>
+                                <option value="">Select Department</option>
+                                <?php
+                                // Assuming you have a database connection in $conn
+                                $query = "SELECT department_id, name FROM department";
+                                $result = $conn->query($query);
+                                
+                                while ($row = $result->fetch_assoc()) {
+                                    echo "<option value='" . $row['department_id'] . "'>" . $row['name'] . "</option>";
+                                }
+                                ?>
+                            </select>
 
-  <label for="event_name">Report of Rejected students</label>
-  <div class="form-group">
-    <form action="rejected_student_report.php" method="post">
-        <label for="from_date">From Date</label>
-        <input type="date" id="from_date" name="from_date" required>
-        
-        <label for="to_date">To Date</label>
-        <input type="date" id="to_date" name="to_date" style="margin-top: 10px;" required>
-        
-        <button type="submit">Generate Report</button>
-    </form>
-</div>
- <!-- Department Report -->
- <div class="form-group">
-    <form action="department_report.php" method="post">
-        <!-- Department dropdown -->
-        <label for="department_name">Department wise report</label>
-        <select id="department_name" name="department_name" required>
-            <option value="">Select Department</option>
-            <!-- PHP code to populate department options -->
-            <?php
-            // Assuming you have a database connection in $conn
-            $query = "SELECT department_id, name FROM department";
-            $result = $conn->query($query);
-            
-            while ($row = $result->fetch_assoc()) {
-                echo "<option value='" . $row['department_id'] . "'>" . $row['name'] . "</option>";
-            }
-            ?>
-        </select>
-    
-    
-         <!-- Date range fields -->
-        <label for="from_date">From Date</label>
-        <input type="date" id="from_date" name="from_date" required>
-        
-        <label for="to_date">To Date</label>
-        <input type="date" id="to_date" name="to_date" style="margin-top: 10px;" required>
-        
-        <!-- Submit button -->
-        <button type="submit">Generate Report</button>
-    </form>
-</div>
+                            <!-- Date range fields -->
+                            <label for="from_date">From Date</label>
+                            <input type="date" id="from_date" name="from_date" required>
+                            
+                            <label for="to_date">To Date</label>
+                            <input type="date" id="to_date" name="to_date" style="margin-top: 10px;" required>
+                            
+                            <!-- Submit button -->
+                            <button type="submit">Generate Report</button>
+                        </form>
+                    </div>
+                    <?php
+                    break;
+                case 'club_report':
+                    ?>
+                    <div class="form-group">
+                        <label for="club_id">Club Report (Select Club)</label>
+                        <form action="club_report_admin.php" method="post">
+                            <select id="club_id" name="club_id">
+                                <?php
+                                // Fetch club names from the club table
+                                $stmt = $conn->prepare("SELECT club_id, name FROM club");
+                                if ($stmt) {
+                                    $stmt->execute();
+                                    $result = $stmt->get_result();
 
-        <!-- Event Report -->
-<div class="form-group">
+                                    while ($row = $result->fetch_assoc()) {
+                                        $club_id = $row['club_id'];
+                                        $club_name = $row['name'];
+                                        echo "<option value='" . htmlspecialchars($club_id) . "'>" . htmlspecialchars($club_name) . "</option>";
+                                    }
+                                    $stmt->close();
+                                }
+                                ?>
+                            </select>
+                            <label for="start_date">Start Date</label>
+                            <input type="date" id="start_date" name="start_date" required>
+                            <label for="end_date">End Date</label>
+                            <input type="date" id="end_date" name="end_date" required>
+                            <button type="submit">Generate Report</button>
+                        </form>
+                    </div>
+                    <?php
+                    break;
+                case 'event_report':
+                    ?>
+                 <div class="form-group">
     <label for="event_name">Event Report (Select Event Name)</label>
     <form action="event_report.php" method="post">
         <select id="event_name" name="event_id"> <!-- Using event_id instead of event_name -->
@@ -282,7 +261,53 @@ if ($stmt) {
         <button type="submit">Generate Report</button>
     </form>
 </div>
+                    <?php
+                    break;
+                case 'approved_event':
+                    ?>
+                    <div class="form-group">
+<label for="event_name">Report of Approved Events</label>
 
+    <!-- Form for selecting a date range for approved events -->
+    <form action="approved_event.php" method="post">
+        <label for="from_date">From Date</label>
+        <input type="date" id="from_date" name="from_date">
+        
+        <label for="to_date">To Date</label>
+        <input type="date" id="to_date" name="to_date" style="margin-top: 10px;">
+        
+        <button type="submit">Generate Report</button>
+    </form>
+</div>
+                    <?php
+                    break;
+                case 'unapproved_event':
+                    ?>
+                   <div class="form-group">
+    <label for="event_name">Unapproved Events</label>
+
+    
+    <div class="form-group">
+        <form action="unapproved_event.php" method="post">
+            <label for="from_date">From Date</label>
+            <input type="date" id="from_date" name="from_date">
+            
+            <label for="to_date">To Date</label>
+            <input type="date" id="to_date" name="to_date" style="margin-top: 10px;">
+            
+            <button type="submit">Generate Report</button>
+        </form>
+    </div>
+                    <?php
+                    break;
+                default:
+                    echo "<p>Invalid report type selected.</p>";
+                    break;
+            }
+        } else {
+            echo "<p>Please select a report type from the options above.</p>";
+        }
+        ?>
     </div>
 </body>
 </html>
