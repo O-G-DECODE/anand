@@ -47,7 +47,7 @@
     ?>
     
     <div class="container">
-        <h2>MES COLLEGE MARAMPALLY</h2>
+       <img src="mes-logo.webp" alt="Logo">
         <?php if (isset($department_name)): ?>
             <h3><?php echo htmlspecialchars($department_name); ?></h3>
         <?php endif; ?>
