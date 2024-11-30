@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <div class="container">
-        <h2>MES COLLEGE MARAMPALLY</h2>
+       <img src="mes-logo.webp" alt="Logo">
         <h5>Rejected Student Report from <?php echo htmlspecialchars($from_date); ?> to <?php echo htmlspecialchars($to_date); ?></h5>
 
         <!-- Display Report if Results Exist -->
