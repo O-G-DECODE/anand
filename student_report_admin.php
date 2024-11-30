@@ -37,7 +37,7 @@ if (isset($_POST['student_name_selected'])) {
         </head>
         <body>
         <div class="container">
-            <h2>MES COLLEGE MARAMPALLY</h2>
+           <img src="mes-logo.webp" alt="Logo">
             <h3> <?php echo htmlspecialchars($student['student_name']); ?></h3>
             <p>Roll Number: <?php echo htmlspecialchars($student['roll_number']); ?></p>
             <p>Department: <?php echo htmlspecialchars($student['department_name']); ?></p>
