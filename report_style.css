@@ -23,10 +23,18 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-.container h2{
+.container img {
+    max-width: 100%;  /* Ensures the image does not exceed the container's width */
+    height: auto;     /* Maintains the aspect ratio */
+    display: block;   /* Removes any space below the image */
+    margin: 0 auto 20px;  /* Centers the image and adds space below it */
+}
+
+.container h2 {
     text-align: center;
     font-family: Georgia, 'Times New Roman', Times, serif;
 }
+
 h3 {
     color: var(--primary-color);
     font-size: 2.5em;
