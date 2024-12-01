@@ -63,7 +63,6 @@ if ($stmt) {
     $stmt->close();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -71,8 +70,49 @@ if ($stmt) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reports Page</title>
     <link rel="stylesheet" href="report_page_style.css">
+    <style>
+        /* Style for the toggle buttons */
+        .btn-container {
+            margin-bottom: 20px;
+        }
+        .toggle-btn {
+            padding: 10px 20px;
+            margin-right: 10px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .toggle-btn:hover {
+            background-color: #45a049;
+        }
 
+        /* Initially hide all forms */
+        .report-form {
+            display: none;
+        }
+
+        /* Style for the active report */
+        .active-form {
+            display: block;
+        }
+    </style>
     <script>
+        // Toggle visibility of the report forms based on the clicked button
+        function showReportForm(formId) {
+            // Hide all report forms
+            var forms = document.querySelectorAll('.report-form');
+            forms.forEach(function(form) {
+                form.classList.remove('active-form');
+            });
+
+            // Show the selected form
+            var selectedForm = document.getElementById(formId);
+            selectedForm.classList.add('active-form');
+        }
+
         // Autocomplete function for student report
         function autocomplete(input, data) {
             input.addEventListener("input", function() {
@@ -92,13 +132,11 @@ if ($stmt) {
                             Department: ${item.department_name}<br>
                             Course: ${item.course_name}
                         `;
-
                         option.addEventListener("click", function() {
                             input.value = item.name;
                             document.getElementById("student_name_hidden").value = item.name;
                             dropdown.innerHTML = "";
                         });
-
                         dropdown.appendChild(option);
                     }
                 });
@@ -119,101 +157,90 @@ if ($stmt) {
 <body>
     <div class="container">
         <h2>Generate Reports</h2>
-
-        <!-- Student Report -->
-        <div class="form-group">
-            <label for="student_name">Student Report (Select Student Name)</label>
-            <input type="text" id="student_name" name="student_name" placeholder="Start typing student name...">
-            <div id="autocomplete-list"></div>
-            <form action="student_report.php" method="post">
-                <input type="hidden" name="student_name_selected" id="student_name_hidden">
-                
-                <!-- Add date fields for the date range -->
-                <label for="from_date_student">From Date</label>
-                <input type="date" id="from_date_student" name="from_date_student">
-                
-                <label for="to_date_student">To Date</label>
-                <input type="date" id="to_date_student" name="to_date_student" style="margin-top: 10px;">
-                
-                <button type="submit" onclick="document.getElementById('student_name_hidden').value = document.getElementById('student_name').value;">Generate Report</button>
-            </form>
+        
+        <!-- Buttons to toggle visibility of report forms -->
+        <div class="btn-container">
+            <button class="toggle-btn" onclick="showReportForm('student-report')">Student Report</button>
+            <button class="toggle-btn" onclick="showReportForm('club-report')">Club Report</button>
+            <button class="toggle-btn" onclick="showReportForm('department-report')">Department Report</button>
+            <button class="toggle-btn" onclick="showReportForm('event-report')">Event Report</button>
         </div>
 
-        <!-- Club Report (Uses staff's club_id from session) -->
-        <div class="form-group">
-            <form action="club_report.php" method="post">
-                <label for="from_date">Club Report<?php echo " ( $club_name )"; ?> (Select Date Range)</label>
-                <input type="date" id="from_date" name="from_date">
-                <input type="date" id="to_date" name="to_date" style="margin-top: 10px;">
-                <button type="submit">Generate Report</button>
-            </form>
+        <!-- Student Report Form -->
+        <div id="student-report" class="report-form">
+            <div class="form-group">
+                <label for="student_name">Student Report (Select Student Name)</label>
+                <input type="text" id="student_name" name="student_name" placeholder="Start typing student name...">
+                <div id="autocomplete-list"></div>
+                <form action="student_report.php" method="post">
+                    <input type="hidden" name="student_name_selected" id="student_name_hidden">
+                    <label for="from_date_student">From Date</label>
+                    <input type="date" id="from_date_student" name="from_date_student">
+                    <label for="to_date_student">To Date</label>
+                    <input type="date" id="to_date_student" name="to_date_student" style="margin-top: 10px;">
+                    <button type="submit">Generate Report</button>
+                </form>
+            </div>
         </div>
-       <!-- Department Report -->
-<div class="form-group">
-    <form action="department_report.php" method="post">
-        <!-- Department dropdown -->
-        <label for="department_name">Department</label>
-        <select id="department_name" name="department_name" required>
-            <option value="">Select Department</option>
-            <!-- PHP code to populate department options -->
-            <?php
-            // Assuming you have a database connection in $conn
-            $query = "SELECT department_id, name FROM department";
-            $result = $conn->query($query);
-            
-            while ($row = $result->fetch_assoc()) {
-                echo "<option value='" . $row['department_id'] . "'>" . $row['name'] . "</option>";
-            }
-            ?>
-        </select>
 
-        <!-- Date range fields -->
-        <label for="from_date">From Date</label>
-        <input type="date" id="from_date" name="from_date" required>
-        
-        <label for="to_date">To Date</label>
-        <input type="date" id="to_date" name="to_date" style="margin-top: 10px;" required>
-        
-        <!-- Submit button -->
-        <button type="submit">Generate Report</button>
-    </form>
-</div>
+        <!-- Club Report Form -->
+        <div id="club-report" class="report-form">
+            <div class="form-group">
+                <form action="club_report.php" method="post">
+                    <label for="from_date">Club Report<?php echo " ( $club_name )"; ?> (Select Date Range)</label>
+                    <input type="date" id="from_date" name="from_date">
+                    <input type="date" id="to_date" name="to_date" style="margin-top: 10px;">
+                    <button type="submit">Generate Report</button>
+                </form>
+            </div>
+        </div>
 
-        <!-- Event Report -->
-        <div class="form-group">
-            <label for="event_name">Event Report (Select Event Name)</label>
-            <form action="event_report.php" method="post">
-                <select id="event_name" name="event_id"> <!-- Using event_id instead of event_name -->
-                <?php
-                // Fetch event names and IDs from the event table for the staff member
-                $stmt = $conn->prepare("
-                    SELECT e.event_id, e.name
-                    FROM event e
-                    JOIN request r ON e.event_id = r.event_id
-                    WHERE e.staff_id = ? AND r.approve > 0
-                    GROUP BY e.event_id
-                ");
+        <!-- Department Report Form -->
+        <div id="department-report" class="report-form">
+            <div class="form-group">
+                <form action="department_report.php" method="post">
+                    <label for="department_name">Department</label>
+                    <select id="department_name" name="department_name" required>
+                        <option value="">Select Department</option>
+                        <?php
+                        $query = "SELECT department_id, name FROM department";
+                        $result = $conn->query($query);
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<option value='" . $row['department_id'] . "'>" . $row['name'] . "</option>";
+                        }
+                        ?>
+                    </select>
+                    <label for="from_date">From Date</label>
+                    <input type="date" id="from_date" name="from_date" required>
+                    <label for="to_date">To Date</label>
+                    <input type="date" id="to_date" name="to_date" style="margin-top: 10px;" required>
+                    <button type="submit">Generate Report</button>
+                </form>
+            </div>
+        </div>
 
-                if ($stmt) {
-                    $stmt->bind_param("i", $_SESSION['staff_id']); // Use session's staff_id
-                    $stmt->execute();
-                    $result = $stmt->get_result();
-
-                    while ($row = $result->fetch_assoc()) {
-                        $event_id = $row['event_id'];
-                        $event_name = $row['name'];
-
-                        // Display the event name as an option, use event_id as the value
-                        echo "<option value='" . htmlspecialchars($event_id) . "'>" . htmlspecialchars($event_name) . "</option>";
+        <!-- Event Report Form -->
+        <div id="event-report" class="report-form">
+            <div class="form-group">
+                <label for="event_name">Event Report (Select Event Name)</label>
+                <form action="event_report.php" method="post">
+                    <select id="event_name" name="event_id">
+                    <?php
+                    $stmt = $conn->prepare("SELECT e.event_id, e.name FROM event e JOIN request r ON e.event_id = r.event_id WHERE e.staff_id = ? AND r.approve > 0 GROUP BY e.event_id");
+                    if ($stmt) {
+                        $stmt->bind_param("i", $_SESSION['staff_id']);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<option value='" . htmlspecialchars($row['event_id']) . "'>" . htmlspecialchars($row['name']) . "</option>";
+                        }
+                        $stmt->close();
                     }
-                    $stmt->close();
-                } else {
-                    echo "<option>No events available</option>";
-                }
-                ?>
-                </select>
-                <button type="submit">Generate Report</button>
-            </form>
+                    ?>
+                    </select>
+                    <button type="submit">Generate Report</button>
+                </form>
+            </div>
         </div>
 
     </div>
