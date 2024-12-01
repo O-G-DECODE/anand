@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Check if any events found 
             if ($result->num_rows > 0) {
                 echo "<div class='container'>";
-                echo "<h2>MES COLLEGE MARAMPALLY </h2>";
+                echo "<img src='mes-logo.webp' alt='Logo'>";
                 echo "<h3>Club Report for $club_name</h3>";
                 echo "<h4>From: $from_date To: $to_date</h4>";
                 echo "<table border='1' cellpadding='10' cellspacing='0' style='width: 100%;'>";
