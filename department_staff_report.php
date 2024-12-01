@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <div class="container">
-        <h2>MES COLLEGE MARAMPALLY</h2>
+        <img src="mes-logo.webp" alt="Logo">
         <h3><?php echo htmlspecialchars($department_name); ?></h3>
         <p>From: <?php echo htmlspecialchars($from_date); ?> To: <?php echo htmlspecialchars($to_date); ?></p>
 
